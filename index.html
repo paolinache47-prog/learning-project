@@ -117,7 +117,59 @@ textarea{width:100%;min-height:128px;resize:vertical;border:1px solid #CDD2DB;bo
 textarea:focus-visible{outline:3px solid var(--accent-soft);border-color:var(--accent);outline-offset:0}
 .field-error{color:var(--error);font-size:13.5px;min-height:1.4em;margin-top:6px}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
-.demo-note{display:flex;gap:8px;align-items:flex-start;margin-top:14px;font-size:13px;color:var(--warning);background:var(--warning-soft);padding:8px 12px;border-radius:8px}
+.demo-note{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:13px;color:var(--muted)}
+.field-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 12px;margin-bottom:6px}
+.field-head label.field{margin:0}
+.field-hint{font-size:13px;color:var(--muted)}
+.reviewed{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:12px}
+.reviewed blockquote,.evidence-quote{margin:0;font-size:14.5px;color:#3A4458;line-height:1.6}
+.typed-note{font-size:13px;color:var(--muted);margin-top:8px}
+.evidence-quote mark{background:var(--success-soft);color:#0F5535;padding:1px 4px;border-radius:4px;font-weight:600}
+.evidence-list{list-style:none;padding:0;margin:10px 0 12px;display:flex;flex-wrap:wrap;gap:6px}
+.evidence-list li{font-size:12.5px;padding:3px 9px;border-radius:6px;background:var(--neutral-soft);color:#3A4458}
+.evidence-list b{color:#0F5535}
+.ra-block{margin-top:18px;padding-top:16px;border-top:1px dashed var(--border)}
+.target{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px}
+.ra-sub{font-size:13.5px;color:var(--muted);margin-top:6px}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.vs-card{border-radius:12px;padding:14px 16px;font-size:14px;border:1px solid var(--border)}
+.vs-card .eyebrow{margin-bottom:2px}
+.vs-title{font-weight:700;font-size:16px;margin-bottom:4px}
+.vs-yes{background:var(--success-soft);border-color:#B5DEC8}
+.vs-yes .vs-title{color:var(--success)}
+.vs-no{background:#fff;border-style:dashed}
+.dots{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.dots i{width:12px;height:12px;border-radius:50%;border:2px solid var(--success);display:inline-block}
+.dots i.on{background:var(--success)}
+.next-step{margin-top:18px}
+.next-step .status-msg{margin-top:4px}
+.rules summary{font-weight:600}
+.rule-list{margin:10px 0 0;padding-left:18px;display:grid;gap:5px;font-size:13.5px;color:#3A4458}
+.rule-list b{font-weight:650;color:var(--text)}
+.rat-intro{max-width:70ch;color:#3A4458;font-size:16px;margin-bottom:18px}
+.rat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.rat-card ul{margin:6px 0 0;padding-left:18px;display:grid;gap:6px;font-size:14.5px}
+.rat-validate{border-style:dashed;box-shadow:none}
+.rat-end{margin-top:18px;font-size:13.5px;color:var(--muted);max-width:80ch}
+.instr{font-size:14px;color:var(--muted);margin-bottom:8px}
+.focus-tag{font-size:12px;font-weight:650;color:var(--accent-ink);background:var(--accent-soft);padding:2px 8px;border-radius:999px}
+.opt .letter{flex:none;width:24px;height:24px;border-radius:6px;border:1.5px solid #CDD2DB;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--muted)}
+.opt .txt{flex:1}
+.opt.long{font-size:15px;font-weight:500;line-height:1.45;flex-wrap:wrap}
+.opt.long .tag:not(:empty){flex-basis:100%;padding-left:36px}
+@media (max-width:560px){.opt{flex-wrap:wrap}.opt .tag:not(:empty){flex-basis:100%;padding-left:36px}}
+.gap-form .stem{line-height:2.3}
+.gap-in{display:inline-flex;flex-direction:column;vertical-align:middle;margin:0 2px}
+.gap-in input{font:inherit;font-size:17px;font-weight:600;width:9.5em;max-width:100%;padding:4px 8px;border:1.5px solid #CDD2DB;border-radius:8px;background:#fff;color:var(--text)}
+.gap-in input:focus-visible{outline:3px solid var(--accent-soft);border-color:var(--accent);outline-offset:0}
+.gap-in.ok input{border-color:var(--success);background:var(--success-soft);color:#0F5535}
+.gap-in.bad input{border-color:var(--error);background:var(--error-soft);color:var(--error)}
+.gap-in small{font-size:12px;line-height:1.3;font-weight:600}
+.gap-in.ok small{color:var(--success)}
+.gap-in.bad small{color:var(--error)}
+.valid-note{font-size:12.5px;color:var(--muted);margin-top:8px}
+.threshold-note{font-size:12.5px;color:var(--muted);margin-top:10px}
+.continue-note{font-size:12.5px;color:var(--muted);flex-basis:100%}
 .demo-note::before{content:"i";flex:none;width:16px;height:16px;margin-top:1px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:10px;font-weight:700;font-style:italic;font-family:Georgia,serif}
 
 /* Feedback */
@@ -255,7 +307,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
   .progress li.is-current .lbl{display:inline}
 }
 @media (max-width:860px){
-  .hero-grid,.grid-2,.grid-profile,.fb-grid{grid-template-columns:1fr}
+  .hero-grid,.grid-2,.grid-profile,.fb-grid,.rat-grid,.vs{grid-template-columns:1fr}
   .hero{padding:36px 16px 44px}
   .stage{padding:40px 16px 4px}
   .wrap{padding:0 16px}
@@ -363,14 +415,16 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
           <p id="scn-prompt"></p>
         </div>
       </div>
-      <label class="field" for="resp-1">Your response</label>
-      <textarea id="resp-1" aria-describedby="resp-1-err demo-note-1"></textarea>
-      <p class="field-error" id="resp-1-err" aria-live="polite"></p>
-      <div class="actions">
-        <button class="btn btn-secondary" id="btn-sample-1" type="button">Use sample response</button>
-        <button class="btn btn-primary" id="btn-analyse" type="button">Analyse response — simulated</button>
+      <div class="field-head">
+        <label class="field" for="resp-1">Response</label>
+        <span class="field-hint" id="resp-1-hint">Recommended: load Anna’s response. Typing your own is optional.</span>
       </div>
-      <p class="demo-note" id="demo-note-1">Demo logic: feedback below is pre-scripted, not generated from your text.</p>
+      <textarea id="resp-1" aria-describedby="resp-1-hint demo-note-1"></textarea>
+      <div class="actions">
+        <button class="btn btn-primary" id="btn-sample-1" type="button">Use Anna’s sample response</button>
+        <button class="btn btn-secondary" id="btn-analyse" type="button">Show simulated feedback</button>
+      </div>
+      <p class="demo-note" id="demo-note-1">The feedback illustrates a predefined learner scenario based on Anna’s response. Text you type here is not analysed.</p>
     </div>
   </div>
 </section>
@@ -385,6 +439,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     <p class="why"><b>Why:</b> not every correction is a skill gap. Only a pattern seen across sessions becomes a learning priority.</p>
   </div>
 
+  <div class="reviewed">
+    <span class="eyebrow">Reviewed response · Anna’s predefined sample</span>
+    <blockquote id="fb-quote"></blockquote>
+    <p class="typed-note" id="fb-typed-note" hidden>Your typed text was not analysed. The feedback below refers to Anna’s response.</p>
+  </div>
   <p class="opening"><span class="tick" aria-hidden="true">✓</span><span id="fb-opening"></span></p>
   <div class="legend" aria-hidden="true">
     <span><span class="chip chip-rec"><span class="ico">↻</span> Recurring pattern</span> seen across sessions → added to profile</span>
@@ -416,6 +475,17 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       </div>
       <div class="skills" id="skills" aria-live="polite"></div>
       <p class="caption">Counts represent simulated learning observations across practice sessions. A real system would need validated scoring rules, confidence thresholds, and privacy safeguards.</p>
+      <details class="obs rules">
+        <summary>How the profile logic works</summary>
+        <ul class="rule-list">
+          <li><b>Recurring observations</b> can trigger a learning priority. A single slip doesn’t.</li>
+          <li><b>Completing microlearning</b> doesn’t erase historical observations.</li>
+          <li><b>Reassessment in a different job-specific context</b> adds evidence of improvement.</li>
+          <li><b>One successful reassessment</b> indicates progress, not stable mastery.</li>
+          <li><b>Repeated success across contexts</b> would be needed before a skill is considered stable.</li>
+        </ul>
+        <p class="caption">Observation counts, thresholds and skill statuses are simulated for this prototype. A real implementation would require validated scoring criteria, confidence thresholds, learner-data safeguards and evaluation.</p>
+      </details>
       <details class="obs">
         <summary>Observation log (<span id="obs-count">0</span> records, simulated)</summary>
         <ul class="obs-list" id="obs-list"></ul>
@@ -440,7 +510,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       <span class="step-tag">Step 4 · Targeted microlearning</span>
       <h2 id="dr-title" tabindex="-1"></h2>
     </div>
-    <p class="why"><b>Why:</b> five items, each built from Anna’s own error types, in the same QA context.</p>
+    <p class="why"><b>Why:</b> five short QA items targeting Anna’s recurring pattern. They move from recognising the form to applying it in a bug report.</p>
   </div>
 
   <div class="card drill" id="drill-card"></div>
@@ -459,27 +529,60 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
   <div class="card" style="max-width:860px">
     <p class="context" id="ra-context"></p>
     <div style="height:18px"></div>
-    <label class="field" for="resp-2">Your response</label>
-    <textarea id="resp-2" aria-describedby="resp-2-err demo-note-2"></textarea>
-    <p class="field-error" id="resp-2-err" aria-live="polite"></p>
-    <div class="actions">
-      <button class="btn btn-secondary" id="btn-sample-2" type="button">Use improved sample response</button>
-      <button class="btn btn-primary" id="btn-reassess" type="button">Reassess skill — simulated</button>
+    <div class="field-head">
+      <label class="field" for="resp-2">Response</label>
+      <span class="field-hint" id="resp-2-hint">Recommended: load Anna’s improved response. Typing your own is optional.</span>
     </div>
-    <p class="demo-note" id="demo-note-2">Demo logic: the reassessment result is pre-scripted, not generated from your text.</p>
+    <textarea id="resp-2" aria-describedby="resp-2-hint demo-note-2"></textarea>
+    <div class="actions">
+      <button class="btn btn-primary" id="btn-sample-2" type="button">Use Anna’s improved response</button>
+      <button class="btn btn-secondary" id="btn-reassess" type="button">Show simulated reassessment</button>
+    </div>
+    <p class="demo-note" id="demo-note-2">The reassessment illustrates a predefined learner scenario based on Anna’s improved response. Text you type here is not analysed.</p>
 
     <div class="result" id="ra-result" data-min="7" hidden aria-live="polite">
       <div class="result-head"><span class="tick" aria-hidden="true">↑</span><h3 id="ra-headline" tabindex="-1"></h3></div>
-      <p id="ra-feedback"></p>
-      <p class="suggest"><span class="eyebrow" style="margin:0 0 2px">Optional refinement · in-the-moment</span><span id="ra-suggest"></span></p>
+      <p class="typed-note" id="ra-typed-note" hidden>Your typed text was not analysed. This result refers to Anna’s improved response.</p>
+
+      <div class="ra-block">
+        <span class="eyebrow">Target skill reassessed</span>
+        <p class="target"><span class="chip chip-id">EN-QA-GRAM-001</span> <b id="ra-skill-name"></b></p>
+        <p class="ra-sub">New context: file upload, a different workplace situation from the checkout bug in Step 1.</p>
+      </div>
+
+      <div class="ra-block">
+        <span class="eyebrow">Evidence illustrated by Anna’s response</span>
+        <blockquote class="evidence-quote" id="ra-quote"></blockquote>
+        <ul class="evidence-list" id="ra-evidence"></ul>
+        <p id="ra-feedback"></p>
+        <p class="suggest"><span class="eyebrow" style="margin:0 0 2px">Optional refinement · in-the-moment</span><span id="ra-suggest"></span></p>
+      </div>
 
       <table class="delta-table">
-        <caption>Profile update · <span class="mono">EN-QA-GRAM-001</span></caption>
+        <caption>Updated learner profile · <span class="mono">EN-QA-GRAM-001</span></caption>
         <thead><tr><th>Skill</th><th>Field</th><th>Before</th><th>After</th></tr></thead>
         <tbody id="ra-delta"></tbody>
       </table>
 
-      <p class="status-msg" id="ra-status"></p>
+      <div class="vs" aria-label="Improvement compared with mastery">
+        <div class="vs-card vs-yes">
+          <span class="eyebrow">Improvement observed</span>
+          <p class="vs-title"><span aria-hidden="true">✓</span> Yes, in this context</p>
+          <p>Accurate verb forms in one new job-specific scenario. Status moves to <b>Improving</b>.</p>
+        </div>
+        <div class="vs-card vs-no">
+          <span class="eyebrow">Skill mastered</span>
+          <p class="vs-title"><span aria-hidden="true">○</span> Not yet</p>
+          <p>Stability needs repeated success across different contexts. Illustrative rule: 3 successful reassessments.</p>
+          <p class="dots" id="ra-dots"></p>
+        </div>
+      </div>
+
+      <div class="next-step">
+        <span class="eyebrow">Next step · continue monitoring</span>
+        <p class="status-msg" id="ra-status"></p>
+        <p class="ra-sub">Future workplace scenarios, such as a regression report or a release check, would show whether the pattern stays resolved. The historical count stays at 7.</p>
+      </div>
 
       <ol class="final-loop" aria-label="Loop progress">
         <li>Practice <span aria-hidden="true">✓</span><span class="sr-only">completed</span></li><li class="sep" aria-hidden="true">→</li>
@@ -488,12 +591,53 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
         <li>Reassessment <span aria-hidden="true">✓</span><span class="sr-only">completed</span></li><li class="sep" aria-hidden="true">→</li>
         <li class="next"><span aria-hidden="true">↻</span> Continue monitoring</li>
       </ol>
-
-      <div class="restart-row">
-        <button class="btn btn-secondary" id="btn-restart" type="button"><span aria-hidden="true">↺</span> Restart demo</button>
-        <p>Resets every value, input and section to the initial state.</p>
-      </div>
     </div>
+  </div>
+</section>
+
+<!-- DESIGN RATIONALE -->
+<section class="stage wrap" id="sec-rationale" data-min="7" hidden aria-labelledby="dr-rat-title">
+  <div class="stage-head">
+    <div>
+      <span class="step-tag">Design rationale &amp; potential value</span>
+      <h2 id="dr-rat-title">From conversation feedback to continuous skill development</h2>
+    </div>
+  </div>
+  <p class="rat-intro">Adaptive Skill Loop explores how recurring patterns in job-specific language practice could inform targeted microlearning and contextual reassessment — connecting feedback, practice, and evidence of progress.</p>
+
+  <div class="rat-grid">
+    <article class="card rat-card">
+      <span class="eyebrow">Learning design</span>
+      <ul>
+        <li>Recurring-pattern prioritisation</li>
+        <li>Contextual microlearning</li>
+        <li>Reassessment and learning transfer</li>
+      </ul>
+    </article>
+    <article class="card rat-card">
+      <span class="eyebrow">Potential learner value</span>
+      <ul>
+        <li>Clearer learning priorities</li>
+        <li>Practice connected to real workplace tasks</li>
+        <li>Visibility into developing skills over time</li>
+      </ul>
+    </article>
+    <article class="card rat-card rat-validate">
+      <span class="eyebrow">What would need validation</span>
+      <ul>
+        <li>Accuracy and reliability of skill detection</li>
+        <li>Appropriate thresholds for recommending practice</li>
+        <li>Effectiveness of microlearning and reassessment</li>
+        <li>Privacy and responsible handling of learner data</li>
+      </ul>
+    </article>
+  </div>
+
+  <p class="rat-end">Independent concept prototype. Designed to demonstrate a learning experience hypothesis, not a validated product feature or an existing Speexx integration.</p>
+
+  <div class="restart-row">
+    <button class="btn btn-secondary" id="btn-restart" type="button"><span aria-hidden="true">↺</span> Restart demo</button>
+    <p>Resets every value, input and section to the initial state.</p>
   </div>
 </section>
 
@@ -764,6 +908,28 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
    "context": "A user uploads a PDF larger than 10 MB. The progress bar reaches 100%, but the file never appears in the document list. Explain the problem to a developer and say what you expected to happen.",
    "placeholder": "Describe the issue in 2–4 sentences…",
    "sampleResponse": "When the user uploads a PDF larger than 10 MB, the progress bar reaches 100%, but the file does not appear in the document list. I reproduced the issue twice in Chrome. I expected the file to appear after the upload completed.",
+   "evidence": [
+    {
+     "text": "uploads",
+     "note": "present simple, 3rd person (trigger)"
+    },
+    {
+     "text": "reaches",
+     "note": "present simple, 3rd person (system behaviour)"
+    },
+    {
+     "text": "does not appear",
+     "note": "negative with does + base form (actual result)"
+    },
+    {
+     "text": "reproduced",
+     "note": "past simple for a completed reproduction"
+    },
+    {
+     "text": "expected",
+     "note": "past simple for the expectation"
+    }
+   ],
    "simulatedResult": {
     "headline": "Improvement detected in this sample.",
     "feedback": "Your verb forms are accurate in this response, and the sequence of events is easy to follow.",
@@ -785,56 +951,92 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
    ],
    "description": "Practise the verb forms you need to describe reproducible software behaviour clearly.",
    "passThreshold": 4,
+   "passThresholdNote": "Illustrative threshold for this prototype; not empirically validated.",
    "items": [
     {
-     "stem": "The checkout page ___ every time the user clicks Pay.",
+     "type": "choice",
+     "focus": "Recognise · present simple",
+     "instruction": "You are writing the Actual result of a reproducible bug. Choose the correct verb form.",
+     "stem": "Actual result: The discount code ___ after the page reloads.",
      "options": [
-      "crashes",
-      "crash",
-      "is crash"
+      "disappears",
+      "disappear",
+      "disappeared"
      ],
-     "answer": "crashes",
-     "feedback": "Correct. ‘The checkout page’ is third-person singular, so the present-simple verb takes -s."
+     "answer": "disappears",
+     "feedback": "Reproducible behaviour is described in the present simple, and ‘the discount code’ is singular, so the verb takes -s. The past simple would describe one past event, not a bug that happens every time."
     },
     {
-     "stem": "Yesterday, I ___ the issue on two browsers.",
+     "type": "choice",
+     "focus": "Choose · past simple",
+     "instruction": "In stand-up, you explain what you did yesterday to reproduce a bug.",
+     "stem": "Yesterday I ___ the bug on staging and attached the logs to the ticket.",
      "options": [
       "reproduced",
-      "reproduce",
-      "reproduces"
+      "have reproduced",
+      "was reproducing"
      ],
      "answer": "reproduced",
-     "feedback": "Correct. ‘Yesterday’ signals a completed past event, so use the past simple."
+     "feedback": "‘Yesterday’ marks finished time, so a completed action takes the past simple, like ‘attached’ in the same sentence. The present perfect does not combine with finished-time words such as ‘yesterday’."
     },
     {
-     "stem": "The user ___ an error message after submitting the form.",
+     "type": "choice",
+     "focus": "Correct · actual behaviour",
+     "instruction": "One part of this Actual result needs correcting. Which change is needed?",
+     "stem": "“When the user clicks Save, the form don’t show an error, but the changes aren’t stored.”",
      "options": [
-      "sees",
-      "see",
-      "seeing"
+      "don’t show → doesn’t show",
+      "aren’t stored → isn’t stored",
+      "clicks → click"
      ],
-     "answer": "sees",
-     "feedback": "Correct. ‘The user’ is singular, so use ‘sees’."
+     "answer": "don’t show → doesn’t show",
+     "feedback": "‘The form’ is singular, so the negative is ‘doesn’t show’. ‘The changes’ is plural, so ‘aren’t stored’ is already correct, and ‘the user clicks’ is correct present simple."
     },
     {
-     "stem": "The payment ___ go through after the timeout.",
+     "type": "choice",
+     "focus": "Select · clearest report",
+     "instruction": "A developer will act on this ticket. Which description is both accurate and clearest?",
+     "stem": "Choose the best description of the issue.",
      "options": [
-      "doesn't",
-      "don't",
-      "isn't"
+      "When the user applies a discount code, the total does not update, and the original price is charged.",
+      "When the user apply a discount code, the total don’t update, and the original price is charged.",
+      "There is a problem with the discount code, it is not working correctly at checkout sometimes."
      ],
-     "answer": "doesn't",
-     "feedback": "Correct. Use ‘doesn’t’ with the singular subject ‘the payment’."
+     "answer": "When the user applies a discount code, the total does not update, and the original price is charged.",
+     "feedback": "The first option names the trigger (‘applies’), the actual result (‘does not update’) and the impact, with accurate verb forms. The second has the same content but two verb-form errors; the third is grammatical but too vague to reproduce."
     },
     {
-     "stem": "The page ___ on the loading screen until the user refreshes it.",
-     "options": [
-      "stays",
-      "stay",
-      "stayed"
+     "type": "gapfill",
+     "focus": "Apply · write the verb forms",
+     "instruction": "Complete the Actual result for a reproducible bug. Write the correct form of each verb in brackets.",
+     "parts": [
+      "When the user ",
+      {
+       "verb": "tap",
+       "accept": [
+        "taps"
+       ]
+      },
+      " Export, the app ",
+      {
+       "verb": "generate",
+       "accept": [
+        "generates"
+       ]
+      },
+      " the file, but the download ",
+      {
+       "verb": "not / start",
+       "accept": [
+        "doesn't start",
+        "does not start"
+       ]
+      },
+      "."
      ],
-     "answer": "stays",
-     "feedback": "Correct. We are describing reproducible current behaviour, so use the present simple."
+     "answer": "taps · generates · doesn’t start (or does not start)",
+     "feedback": "Present simple throughout: this is reproducible behaviour. Singular subjects take -s (‘taps’, ‘generates’), and the negative uses ‘doesn’t’ / ‘does not’ + base form (‘start’).",
+     "validationNote": "Checked against a fixed list of accepted answers — not free-text analysis."
     }
    ]
   }
@@ -847,8 +1049,13 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     "to": "Priority practice"
    },
    {
-    "event": "targeted practice completed",
+    "event": "targeted practice completed with score >= passThreshold (4/5)",
     "to": "Practice completed · Ready to reassess",
+    "issueCountChange": "none — history is kept"
+   },
+   {
+    "event": "targeted practice completed with score < passThreshold",
+    "to": "More practice recommended",
     "issueCountChange": "none — history is kept"
    },
    {
@@ -889,7 +1096,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       profile: JSON.parse(JSON.stringify(DATA.profile)),
       observations: JSON.parse(JSON.stringify(DATA.observations)),
       before: { issueCount: DATA.profile[GRAM].issueCount, recentSuccesses: DATA.profile[GRAM].recentSuccesses, status: DATA.profile[GRAM].status },
-      drill: { index: 0, answers: [] },
+      drill: { index: 0, answers: [], gapError: '' },
+      typedOwn1: false,   // learner typed something other than Anna's sample (it is still not analysed)
+      typedOwn2: false,
       reassessBefore: null
     };
   }
@@ -914,6 +1123,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     'Developing': ['st-developing', '◐'],
     'Monitor': ['st-monitor', '◎'],
     'Practice completed · Ready to reassess': ['st-ready', '✓'],
+    'More practice recommended': ['st-priority', '↺'],
     'Improving': ['st-improving', '↑']
   };
   function statusBadge(status) {
@@ -947,6 +1157,25 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     $('ra-feedback').textContent = r.feedback;
     $('ra-suggest').textContent = r.secondarySuggestion;
     $('ra-status').textContent = r.statusMessage;
+
+    $('fb-quote').textContent = '“' + practice.sampleResponse + '”';
+    $('ra-skill-name').textContent = skillsById[GRAM].name;
+    var quote = esc(reassessScn.sampleResponse);
+    (reassessScn.evidence || []).forEach(function (e) { quote = quote.replace(esc(e.text), '<mark>' + esc(e.text) + '</mark>'); });
+    $('ra-quote').innerHTML = '“' + quote + '”';
+    $('ra-evidence').innerHTML = (reassessScn.evidence || []).map(function (e) {
+      return '<li><b>' + esc(e.text) + '</b> · ' + esc(e.note) + '</li>';
+    }).join('');
+  }
+
+  /* Highlight the recommended next action: load Anna's sample first, then show the result. */
+  function setPrimary(primaryId, secondaryId) {
+    $(primaryId).classList.add('btn-primary'); $(primaryId).classList.remove('btn-secondary');
+    $(secondaryId).classList.add('btn-secondary'); $(secondaryId).classList.remove('btn-primary');
+  }
+  function syncDemoButtons() {
+    if ($('resp-1').value.trim()) setPrimary('btn-analyse', 'btn-sample-1'); else setPrimary('btn-sample-1', 'btn-analyse');
+    if ($('resp-2').value.trim()) setPrimary('btn-reassess', 'btn-sample-2'); else setPrimary('btn-sample-2', 'btn-reassess');
   }
 
   /* ---------- Dynamic rendering ---------- */
@@ -985,6 +1214,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     $('btn-reassess').disabled = state.stage >= S.REASSESSMENT_COMPLETE;
     $('btn-sample-2').disabled = state.stage >= S.REASSESSMENT_COMPLETE;
     $('resp-2').readOnly = state.stage >= S.REASSESSMENT_COMPLETE;
+    syncDemoButtons();
+    $('fb-typed-note').hidden = !state.typedOwn1;
+    $('ra-typed-note').hidden = !state.typedOwn2;
   }
 
   function renderSnapshot() {
@@ -1026,7 +1258,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
       var p = state.profile[id], sk = skillsById[id], isGram = id === GRAM;
       var issueDelta = '', succDelta = '';
       if (isGram && state.stage >= S.FEEDBACK_SHOWN) issueDelta = '<span class="delta">was ' + state.before.issueCount + ' · +1</span>';
-      if (isGram && state.stage >= S.DRILL_COMPLETE && state.stage < S.REASSESSMENT_COMPLETE) issueDelta = '<span class="delta keep">history kept</span>';
+      if (isGram && state.stage >= S.DRILL_COMPLETE) issueDelta = '<span class="delta keep">history kept</span>';
       if (isGram && state.stage >= S.REASSESSMENT_COMPLETE) succDelta = '<span class="delta up">+1</span>';
       var cls = '';
       if (isGram) cls = state.stage >= S.REASSESSMENT_COMPLETE ? ' is-improving' : (state.stage >= S.PROFILE_UPDATED ? ' is-focus' : '');
@@ -1036,7 +1268,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
         '<div class="skill-metrics">' +
         '<span class="metric"><strong>' + p.issueCount + '</strong>Issue observations' + issueDelta + '</span>' +
         '<span class="metric"><strong>' + p.recentSuccesses + '</strong>Recent successful reassessments' + succDelta + '</span></div>' +
-        (p.practiceCompleted ? '<p class="practice-flag"><span aria-hidden="true">✓</span> Targeted practice completed' + (p.lastPractisedAt ? ' · ' + p.lastPractisedAt : '') + '</p>' : '') +
+        (p.practiceCompleted ? '<p class="practice-flag"><span aria-hidden="true">✓</span> Targeted practice completed' +
+          (p.practiceScore != null ? ' · score ' + p.practiceScore + '/' + activity.items.length : '') +
+          (p.lastPractisedAt ? ' · ' + p.lastPractisedAt : '') + '</p>' : '') +
         '</article>';
     }).join('');
 
@@ -1053,57 +1287,106 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     $('rec-succ').textContent = state.profile[GRAM].recentSuccesses;
   }
 
+  /* Drill scoring: choice items compare the selected option; gap-fill items are checked
+     against a fixed list of accepted answers (transparent rule, no free-text analysis). */
+  function normalise(v) { return String(v || '').trim().toLowerCase().replace(/[’‘`]/g, "'").replace(/\s+/g, ' ').replace(/[.!]$/, ''); }
+  function gapSlots(it) { return it.parts.filter(function (p) { return typeof p === 'object'; }); }
+  function isCorrect(it, ans) {
+    if (ans === undefined) return false;
+    return it.type === 'gapfill' ? ans.correct : ans === it.answer;
+  }
+  function drillScore() {
+    return state.drill.answers.filter(function (a, i) { return isCorrect(activity.items[i], a); }).length;
+  }
+
   function renderDrill() {
     var card = $('drill-card'), d = state.drill, items = activity.items, total = items.length;
     if (state.stage < S.DRILL_ACTIVE) { card.innerHTML = ''; return; }
 
     if (state.stage >= S.DRILL_COMPLETE) {
-      var score = d.answers.filter(function (a, i) { return a === items[i].answer; }).length;
+      var score = drillScore();
       var pass = score >= activity.passThreshold;
+      var locked = state.stage >= S.REASSESSMENT_ACTIVE;
       card.innerHTML =
         '<div class="score" aria-live="polite">' +
           '<div class="score-ring" style="--p:' + (score / total * 100) + '"><span>' + score + '/' + total + '</span></div>' +
-          '<div><span class="eyebrow">Microlearning</span><h3 id="score-title" tabindex="-1">Practice complete</h3>' +
-          '<p>Your score: <b>' + score + '/' + total + '</b>' + (pass ? ' — ready for a new scenario.' : ' — a quick retry could help, but you can still continue.') + '</p></div>' +
+          '<div><span class="eyebrow">Microlearning · activity completed</span><h3 id="score-title" tabindex="-1">' +
+          (pass ? 'Practice completed — ready to reassess' : 'More practice recommended') + '</h3>' +
+          '<p>Your score: <b>' + score + '/' + total + '</b>. ' +
+          (pass ? 'That meets the practice threshold, so the next step is a new workplace scenario.'
+                : 'That is below the practice threshold of ' + activity.passThreshold + '/' + total + '. A retry is recommended before reassessment.') + '</p></div>' +
         '</div>' +
-        '<div class="history-note"><span aria-hidden="true">i</span><span><b>Historical observations stay at ' + state.profile[GRAM].issueCount + '.</b> Completing a drill shows practice, not transfer. The status becomes “Practice completed · Ready to reassess”, and the skill is checked again in a new scenario.</span></div>' +
+        '<div class="history-note"><span aria-hidden="true">i</span><span><b>Historical observations stay at ' + state.profile[GRAM].issueCount + '.</b> ' +
+          'A practice score shows practice, not transfer to real work. Transfer is checked in a new scenario in Step 5.</span></div>' +
+        '<p class="threshold-note">The ' + activity.passThreshold + '/' + total + ' threshold is illustrative and has not been empirically validated.</p>' +
         '<div class="next-row">' +
-          (!pass && state.stage < S.REASSESSMENT_ACTIVE ? '<button class="btn btn-secondary" id="btn-retry" type="button">↺ Retry practice</button>' : '') +
-          '<button class="btn btn-primary" id="btn-new-scn" type="button"' + (state.stage >= S.REASSESSMENT_ACTIVE ? ' disabled' : '') + '>Try a new QA scenario <span class="arr" aria-hidden="true">→</span></button>' +
+          (pass
+            ? '<button class="btn btn-primary" id="btn-new-scn" type="button"' + (locked ? ' disabled' : '') + '>Try a new QA scenario <span class="arr" aria-hidden="true">→</span></button>'
+            : (locked ? '' : '<button class="btn btn-primary" id="btn-retry" type="button"><span aria-hidden="true">↺</span> Retry practice</button>') +
+              '<button class="btn btn-secondary" id="btn-new-scn" type="button"' + (locked ? ' disabled' : '') + '>Continue the demo to reassessment</button>' +
+              '<p class="continue-note">This continues the walkthrough. It does not mean the practice threshold was met.</p>') +
         '</div>';
       var retry = $('btn-retry'); if (retry) retry.addEventListener('click', retryDrill);
       $('btn-new-scn').addEventListener('click', startReassessment);
       return;
     }
 
-    var it = items[d.index], chosen = d.answers[d.index], answered = chosen !== undefined;
-    var stemHTML = esc(it.stem).replace('___', '<span class="gap">' + (answered ? esc(chosen) : '&nbsp;') + '</span>');
-    var opts = it.options.map(function (o, i) {
-      var cls = '', tag = '';
-      if (answered) {
-        if (o === it.answer) { cls = 'correct'; tag = '✓ ' + (o === chosen ? 'Your answer · correct' : 'Correct answer'); }
-        else if (o === chosen) { cls = 'wrong'; tag = '✗ Your answer'; }
-        else cls = 'dim';
-      }
-      return '<button type="button" class="opt ' + cls + '" data-opt="' + i + '"' + (answered ? ' disabled' : '') + '><span>' + esc(o) + '</span><span class="tag">' + tag + '</span></button>';
-    }).join('');
+    var it = items[d.index], ans = d.answers[d.index], answered = ans !== undefined, ok = isCorrect(it, ans);
+    var done = d.index + (answered ? 1 : 0);
+    var head =
+      '<div class="drill-top"><span>Question <b>' + (d.index + 1) + '/' + total + '</b></span><span class="focus-tag">' + esc(it.focus) + '</span></div>' +
+      '<div class="bar" role="progressbar" aria-label="Drill progress" aria-valuemin="0" aria-valuemax="' + total + '" aria-valuenow="' + done + '"><span style="width:' + (done / total * 100) + '%"></span></div>' +
+      '<p class="instr">' + esc(it.instruction) + '</p>';
     var fb = '';
     if (answered) {
-      fb = chosen === it.answer
-        ? '<strong>✓ </strong>' + esc(it.feedback)
-        : '<strong>✗ Not quite.</strong> The answer is “' + esc(it.answer) + '”. ' + esc(it.feedback.replace(/^Correct\.\s*/, ''));
+      fb = ok ? '<strong>✓ Correct.</strong> ' + esc(it.feedback)
+              : '<strong>✗ Not quite.</strong> ' + (it.type === 'gapfill' ? 'Accepted answers: ' + esc(it.answer) + '. ' : 'The correct answer is marked above. ') + esc(it.feedback);
     }
-    card.innerHTML =
-      '<div class="drill-top"><span>Question <b>' + (d.index + 1) + '/' + total + '</b></span><span>Grammar in context · <span class="mono">' + activity.skillId + '</span></span></div>' +
-      '<div class="bar" role="progressbar" aria-label="Drill progress" aria-valuemin="0" aria-valuemax="' + total + '" aria-valuenow="' + (d.index + (answered ? 1 : 0)) + '"><span style="width:' + ((d.index + (answered ? 1 : 0)) / total * 100) + '%"></span></div>' +
-      '<p class="stem" id="stem">' + stemHTML + '</p>' +
-      '<div class="options" role="group" aria-labelledby="stem">' + opts + '</div>' +
-      '<p class="drill-fb ' + (answered ? (chosen === it.answer ? 'ok' : 'no') : '') + '" aria-live="polite">' + fb + '</p>' +
-      (answered ? '<div class="drill-nav"><button type="button" class="btn btn-primary" id="btn-next">' + (d.index + 1 < total ? 'Next question' : 'See score') + ' <span class="arr" aria-hidden="true">→</span></button></div>' : '');
+    var nav = answered ? '<div class="drill-nav"><button type="button" class="btn btn-primary" id="btn-next">' + (d.index + 1 < total ? 'Next question' : 'See score') + ' <span class="arr" aria-hidden="true">→</span></button></div>' : '';
+    var body;
+
+    if (it.type === 'gapfill') {
+      var slot = -1;
+      var stem = it.parts.map(function (p) {
+        if (typeof p === 'string') return esc(p);
+        slot += 1;
+        var val = answered ? ans.values[slot] : ((d.draft || [])[slot] || '');
+        var good = answered && ans.checks[slot];
+        return '<span class="gap-in' + (answered ? (good ? ' ok' : ' bad') : '') + '">' +
+          '<label class="sr-only" for="gap-' + slot + '">Verb ' + (slot + 1) + ': ' + esc(p.verb) + '</label>' +
+          '<input id="gap-' + slot + '" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="(' + esc(p.verb) + ')" value="' + esc(val) + '"' + (answered ? ' readonly' : '') + '>' +
+          (answered ? '<small>' + (good ? '✓ correct' : '✗ ' + esc(p.accept[0])) + '</small>' : '') + '</span>';
+      }).join('');
+      body = '<form class="gap-form" id="gap-form" novalidate>' +
+        '<p class="stem" id="stem">' + stem + '</p>' +
+        '<p class="field-error" aria-live="polite">' + esc(d.gapError || '') + '</p>' +
+        (answered ? '' : '<div class="actions"><button type="submit" class="btn btn-primary">Check answer</button></div>') +
+        '<p class="valid-note">' + esc(it.validationNote) + '</p></form>';
+    } else {
+      var stemHTML = esc(it.stem).replace('___', '<span class="gap">' + (answered ? esc(ans) : '&nbsp;') + '</span>');
+      var long = it.options.some(function (o) { return o.length > 40; });
+      var opts = it.options.map(function (o, i) {
+        var cls = '', tag = '';
+        if (answered) {
+          if (o === it.answer) { cls = 'correct'; tag = '✓ ' + (o === ans ? 'Your answer · correct' : 'Correct answer'); }
+          else if (o === ans) { cls = 'wrong'; tag = '✗ Your answer'; }
+          else cls = 'dim';
+        }
+        return '<button type="button" class="opt ' + cls + (long ? ' long' : '') + '" data-opt="' + i + '"' + (answered ? ' disabled' : '') + '>' +
+          '<span class="letter" aria-hidden="true">' + 'ABC'[i] + '</span><span class="txt">' + esc(o) + '</span><span class="tag">' + tag + '</span></button>';
+      }).join('');
+      body = '<p class="stem" id="stem">' + stemHTML + '</p>' +
+        '<div class="options" role="group" aria-labelledby="stem">' + opts + '</div>';
+    }
+
+    card.innerHTML = head + body +
+      '<p class="drill-fb ' + (answered ? (ok ? 'ok' : 'no') : '') + '" aria-live="polite">' + fb + '</p>' + nav;
 
     card.querySelectorAll('.opt').forEach(function (b) {
       b.addEventListener('click', function () { answer(Number(b.getAttribute('data-opt'))); });
     });
+    var form = $('gap-form');
+    if (form && !answered) form.addEventListener('submit', function (e) { e.preventDefault(); checkGapfill(); });
     var next = $('btn-next'); if (next) next.addEventListener('click', nextItem);
   }
 
@@ -1118,6 +1401,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     $('ra-delta').innerHTML = rows.map(function (r) {
       return '<tr><td class="mono">' + GRAM + '</td><td>' + r[0] + '</td><td class="num">' + esc(r[1]) + '</td><td class="num"><b>' + esc(r[2]) + '</b></td></tr>';
     }).join('');
+    var need = 3, have = Math.min(p.recentSuccesses, need), dots = '';
+    for (var i = 0; i < need; i++) dots += '<i class="' + (i < have ? 'on' : '') + '" aria-hidden="true"></i>';
+    $('ra-dots').innerHTML = dots + '<span>' + have + ' of ' + need + ' successful reassessments (illustrative)</span>';
   }
 
   function render() {
@@ -1135,14 +1421,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     if (state.stage < S.SCENARIO_ACTIVE) state.stage = S.SCENARIO_ACTIVE;
     render(); goTo('sec-scenario', 'scn-title');
   }
-  function useSample1() { $('resp-1').value = practice.sampleResponse; $('resp-1-err').textContent = ''; }
+  function useSample1() { $('resp-1').value = practice.sampleResponse; syncDemoButtons(); if (!instant) $('btn-analyse').focus(); }
 
   function analyse() {
     if (state.stage >= S.FEEDBACK_SHOWN) return;
+    // Pre-scripted result: always Anna's predefined response, never the typed text.
     var text = $('resp-1').value.trim();
-    if (!text) { $('resp-1-err').textContent = 'Write a short response or use the sample response first.'; $('resp-1').focus(); return; }
-    $('resp-1-err').textContent = '';
-    // Pre-scripted result: independent of the typed text.
+    if (!text) $('resp-1').value = practice.sampleResponse;
+    state.typedOwn1 = !!text && text !== practice.sampleResponse;
     var rec = practice.simulatedFeedback.items.filter(function (i) { return i.createsObservation; })[0];
     state.profile[rec.skillId].issueCount += 1;                 // 6 → 7
     state.observations.push({
@@ -1165,14 +1451,36 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
 
   function startDrill() {
     if (state.stage !== S.PROFILE_UPDATED) return;
-    state.stage = S.DRILL_ACTIVE; state.drill = { index: 0, answers: [] };
+    state.stage = S.DRILL_ACTIVE; state.drill = { index: 0, answers: [], gapError: '' };
     render(); goTo('sec-drill', 'dr-title');
   }
 
   function answer(i) {
     var d = state.drill, it = activity.items[d.index];
-    if (d.answers[d.index] !== undefined) return;
+    if (d.answers[d.index] !== undefined || it.type !== 'choice') return;
     d.answers[d.index] = it.options[i];
+    renderDrill();
+    var next = $('btn-next'); if (next && !instant) next.focus();
+  }
+
+  function checkGapfill(values) {
+    var d = state.drill, it = activity.items[d.index];
+    if (d.answers[d.index] !== undefined || it.type !== 'gapfill') return;
+    var slots = gapSlots(it);
+    values = values || slots.map(function (s, k) { return $('gap-' + k).value; });
+    if (values.some(function (v) { return !normalise(v); })) {
+      d.gapError = 'Fill in all ' + slots.length + ' verbs, then check.';
+      d.draft = values;
+      renderDrill();
+      var empty = slots.map(function (s, k) { return $('gap-' + k); }).filter(function (el) { return !normalise(el.value); })[0];
+      if (empty) empty.focus();
+      return;
+    }
+    var checks = slots.map(function (s, k) {
+      return s.accept.map(normalise).indexOf(normalise(values[k])) !== -1;
+    });
+    d.gapError = '';
+    d.answers[d.index] = { values: values.map(function (v) { return v.trim(); }), checks: checks, correct: checks.every(Boolean) };
     renderDrill();
     var next = $('btn-next'); if (next && !instant) next.focus();
   }
@@ -1181,21 +1489,26 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     var d = state.drill;
     if (d.index + 1 < activity.items.length) {
       d.index += 1; renderDrill();
-      var first = document.querySelector('#drill-card .opt'); if (first && !instant) first.focus();
+      var first = document.querySelector('#drill-card .opt, #drill-card input'); if (first && !instant) first.focus();
       return;
     }
-    // DRILL_COMPLETE: practice recorded, history kept (issueCount NOT reduced).
-    var p = state.profile[GRAM];
+    // DRILL_COMPLETE: activity completed; history kept (issueCount NOT reduced).
+    // Status depends on the (illustrative) practice threshold.
+    var p = state.profile[GRAM], score = drillScore();
     p.practiceCompleted = true;
+    p.practiceScore = score;
     p.lastPractisedAt = new Date().toISOString().slice(0, 10);
-    p.status = 'Practice completed · Ready to reassess';
+    p.status = score >= activity.passThreshold ? 'Practice completed · Ready to reassess' : 'More practice recommended';
     state.stage = S.DRILL_COMPLETE;
     render();
     var t = $('score-title'); if (t && !instant) t.focus();
   }
 
   function retryDrill() {
-    state.drill = { index: 0, answers: [] };
+    if (state.stage !== S.DRILL_COMPLETE) return;
+    var p = state.profile[GRAM];
+    p.practiceCompleted = false; p.practiceScore = null; p.status = 'Priority practice';
+    state.drill = { index: 0, answers: [], gapError: '' };
     state.stage = S.DRILL_ACTIVE;
     render(); goTo('sec-drill', 'dr-title');
   }
@@ -1205,13 +1518,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     state.stage = S.REASSESSMENT_ACTIVE;
     render(); goTo('sec-reassess', 'ra-title');
   }
-  function useSample2() { $('resp-2').value = reassessScn.sampleResponse; $('resp-2-err').textContent = ''; }
+  function useSample2() { $('resp-2').value = reassessScn.sampleResponse; syncDemoButtons(); if (!instant) $('btn-reassess').focus(); }
 
   function reassess() {
     if (state.stage !== S.REASSESSMENT_ACTIVE) return;
+    // Pre-scripted result: always Anna's predefined improved response, never the typed text.
     var text = $('resp-2').value.trim();
-    if (!text) { $('resp-2-err').textContent = 'Write a short response or use the improved sample response first.'; $('resp-2').focus(); return; }
-    $('resp-2-err').textContent = '';
+    if (!text) $('resp-2').value = reassessScn.sampleResponse;
+    state.typedOwn2 = !!text && text !== reassessScn.sampleResponse;
     var p = state.profile[GRAM];
     state.reassessBefore = { issueCount: p.issueCount, recentSuccesses: p.recentSuccesses, status: p.status };
     p.recentSuccesses += 1;                                      // 0 → 1
@@ -1230,8 +1544,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
   function restart() {
     state = initialState();
     $('resp-1').value = ''; $('resp-2').value = '';
-    $('resp-1-err').textContent = ''; $('resp-2-err').textContent = '';
-    document.querySelector('details.obs').open = false;
+    document.querySelectorAll('details.obs').forEach(function (el) { el.open = false; });
     render();
     window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
     $('hero-title').focus({ preventScroll: true });
@@ -1246,6 +1559,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
   $('btn-sample-2').addEventListener('click', useSample2);
   $('btn-reassess').addEventListener('click', reassess);
   $('btn-restart').addEventListener('click', restart);
+  $('resp-1').addEventListener('input', syncDemoButtons);
+  $('resp-2').addEventListener('input', syncDemoButtons);
 
   renderStatic();
   state = initialState();
@@ -1261,8 +1576,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 2
     if (n >= 0) { start(); useSample1(); }
     if (n >= 1) analyse();
     if (n >= 2) updateProfile();
-    if (n >= 3) { startDrill(); answer(0); }
-    if (n >= 4) { for (var k = 0; k < 5; k++) { if (state.drill.answers[state.drill.index] === undefined) answer(0); nextItem(); } }
+    var answerCorrectly = function () {
+      var it = activity.items[state.drill.index];
+      if (state.drill.answers[state.drill.index] !== undefined) return;
+      if (it.type === 'gapfill') checkGapfill(gapSlots(it).map(function (s) { return s.accept[0]; }));
+      else answer(it.options.indexOf(it.answer));
+    };
+    if (n >= 3) { startDrill(); answerCorrectly(); }
+    if (n >= 4) { for (var k = 0; k < activity.items.length; k++) { answerCorrectly(); nextItem(); } }
     if (n >= 5) { startReassessment(); useSample2(); reassess(); }
     var target = { scenario: 'sec-scenario', feedback: 'sec-feedback', profile: 'sec-profile', drill: 'sec-drill', score: 'sec-drill', reassessed: 'sec-reassess' }[jump];
     // Screenshot mode: no animations; hide everything above the target so it starts at the top.
