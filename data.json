@@ -166,6 +166,13 @@
       "context": "A user uploads a PDF larger than 10 MB. The progress bar reaches 100%, but the file never appears in the document list. Explain the problem to a developer and say what you expected to happen.",
       "placeholder": "Describe the issue in 2–4 sentences…",
       "sampleResponse": "When the user uploads a PDF larger than 10 MB, the progress bar reaches 100%, but the file does not appear in the document list. I reproduced the issue twice in Chrome. I expected the file to appear after the upload completed.",
+      "evidence": [
+        { "text": "uploads",         "note": "present simple, 3rd person (trigger)" },
+        { "text": "reaches",         "note": "present simple, 3rd person (system behaviour)" },
+        { "text": "does not appear", "note": "negative with does + base form (actual result)" },
+        { "text": "reproduced",      "note": "past simple for a completed reproduction" },
+        { "text": "expected",        "note": "past simple for the expectation" }
+      ],
       "simulatedResult": {
         "headline": "Improvement detected in this sample.",
         "feedback": "Your verb forms are accurate in this response, and the sequence of events is easy to follow.",
@@ -183,12 +190,62 @@
       "meta": ["2–3 min", "Grammar in context", "QA English", "EN-QA-GRAM-001"],
       "description": "Practise the verb forms you need to describe reproducible software behaviour clearly.",
       "passThreshold": 4,
+      "passThresholdNote": "Illustrative threshold for this prototype; not empirically validated.",
       "items": [
-        { "stem": "The checkout page ___ every time the user clicks Pay.",           "options": ["crashes", "crash", "is crash"],          "answer": "crashes",    "feedback": "Correct. ‘The checkout page’ is third-person singular, so the present-simple verb takes -s." },
-        { "stem": "Yesterday, I ___ the issue on two browsers.",                    "options": ["reproduced", "reproduce", "reproduces"], "answer": "reproduced", "feedback": "Correct. ‘Yesterday’ signals a completed past event, so use the past simple." },
-        { "stem": "The user ___ an error message after submitting the form.",       "options": ["sees", "see", "seeing"],                 "answer": "sees",       "feedback": "Correct. ‘The user’ is singular, so use ‘sees’." },
-        { "stem": "The payment ___ go through after the timeout.",                  "options": ["doesn't", "don't", "isn't"],             "answer": "doesn't",    "feedback": "Correct. Use ‘doesn’t’ with the singular subject ‘the payment’." },
-        { "stem": "The page ___ on the loading screen until the user refreshes it.", "options": ["stays", "stay", "stayed"],              "answer": "stays",      "feedback": "Correct. We are describing reproducible current behaviour, so use the present simple." }
+        {
+          "type": "choice",
+          "focus": "Recognise · present simple",
+          "instruction": "You are writing the Actual result of a reproducible bug. Choose the correct verb form.",
+          "stem": "Actual result: The discount code ___ after the page reloads.",
+          "options": ["disappears", "disappear", "disappeared"],
+          "answer": "disappears",
+          "feedback": "Reproducible behaviour is described in the present simple, and ‘the discount code’ is singular, so the verb takes -s. The past simple would describe one past event, not a bug that happens every time."
+        },
+        {
+          "type": "choice",
+          "focus": "Choose · past simple",
+          "instruction": "In stand-up, you explain what you did yesterday to reproduce a bug.",
+          "stem": "Yesterday I ___ the bug on staging and attached the logs to the ticket.",
+          "options": ["reproduced", "have reproduced", "was reproducing"],
+          "answer": "reproduced",
+          "feedback": "‘Yesterday’ marks finished time, so a completed action takes the past simple, like ‘attached’ in the same sentence. The present perfect does not combine with finished-time words such as ‘yesterday’."
+        },
+        {
+          "type": "choice",
+          "focus": "Correct · actual behaviour",
+          "instruction": "One part of this Actual result needs correcting. Which change is needed?",
+          "stem": "“When the user clicks Save, the form don’t show an error, but the changes aren’t stored.”",
+          "options": ["don’t show → doesn’t show", "aren’t stored → isn’t stored", "clicks → click"],
+          "answer": "don’t show → doesn’t show",
+          "feedback": "‘The form’ is singular, so the negative is ‘doesn’t show’. ‘The changes’ is plural, so ‘aren’t stored’ is already correct, and ‘the user clicks’ is correct present simple."
+        },
+        {
+          "type": "choice",
+          "focus": "Select · clearest report",
+          "instruction": "A developer will act on this ticket. Which description is both accurate and clearest?",
+          "stem": "Choose the best description of the issue.",
+          "options": [
+            "When the user applies a discount code, the total does not update, and the original price is charged.",
+            "When the user apply a discount code, the total don’t update, and the original price is charged.",
+            "There is a problem with the discount code, it is not working correctly at checkout sometimes."
+          ],
+          "answer": "When the user applies a discount code, the total does not update, and the original price is charged.",
+          "feedback": "The first option names the trigger (‘applies’), the actual result (‘does not update’) and the impact, with accurate verb forms. The second has the same content but two verb-form errors; the third is grammatical but too vague to reproduce."
+        },
+        {
+          "type": "gapfill",
+          "focus": "Apply · write the verb forms",
+          "instruction": "Complete the Actual result for a reproducible bug. Write the correct form of each verb in brackets.",
+          "parts": [
+            "When the user ", { "verb": "tap",        "accept": ["taps"] },
+            " Export, the app ",  { "verb": "generate",   "accept": ["generates"] },
+            " the file, but the download ", { "verb": "not / start", "accept": ["doesn't start", "does not start"] },
+            "."
+          ],
+          "answer": "taps · generates · doesn’t start (or does not start)",
+          "feedback": "Present simple throughout: this is reproducible behaviour. Singular subjects take -s (‘taps’, ‘generates’), and the negative uses ‘doesn’t’ / ‘does not’ + base form (‘start’).",
+          "validationNote": "Checked against a fixed list of accepted answers — not free-text analysis."
+        }
       ]
     }
   ],
@@ -197,7 +254,8 @@
     "note": "Illustrative demo transitions only. A real system would need validated scoring rules, confidence thresholds and privacy safeguards.",
     "transitions": [
       { "event": "recurring issue observed in practice", "to": "Priority practice" },
-      { "event": "targeted practice completed",          "to": "Practice completed · Ready to reassess", "issueCountChange": "none — history is kept" },
+      { "event": "targeted practice completed with score >= passThreshold (4/5)", "to": "Practice completed · Ready to reassess", "issueCountChange": "none — history is kept" },
+      { "event": "targeted practice completed with score < passThreshold",      "to": "More practice recommended",              "issueCountChange": "none — history is kept" },
       { "event": "successful reassessment in new scenario", "to": "Improving", "recentSuccessesChange": "+1" },
       { "event": "3 successful reassessments across scenarios", "to": "Stable (not shown in demo)" }
     ]

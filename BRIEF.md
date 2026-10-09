@@ -28,13 +28,13 @@ This concept therefore **does not** claim a missing Speexx capability, does not 
 ## 4. User Flow & State Transitions
 
 1. **INITIAL**: hero with the thesis, design question, loop diagram and *Try the 2-minute demo*.
-2. **→ SCENARIO_ACTIVE**: the checkout-bug scenario appears. The learner card shows `EN-QA-GRAM-001` with **6** prior observations. The user types a response or clicks *Use sample response*. An empty submission shows an inline error.
-3. **→ FEEDBACK_SHOWN** (*Analyse response — simulated*): pre-scripted feedback appears, with a positive opening and 3 cards. Card 1 is a **Recurring pattern** with the counter **6 → 7** and 5 corrections. Cards 2–3 are **In-the-moment** suggestions (vocabulary; Steps/Actual/Expected template). One issue observation is appended.
+2. **→ SCENARIO_ACTIVE**: the checkout-bug scenario appears. The learner card shows `EN-QA-GRAM-001` with **6** prior observations. The recommended path is *Use Anna’s sample response*. Typing your own is optional and labelled as such, and the feedback always refers to Anna’s predefined response.
+3. **→ FEEDBACK_SHOWN** (*Show simulated feedback*): pre-scripted feedback appears, showing which response it refers to (Anna’s sample), and notes when typed text was not analysed, with a positive opening and 3 cards. Card 1 is a **Recurring pattern** with the counter **6 → 7** and 5 corrections. Cards 2–3 are **In-the-moment** suggestions (vocabulary; Steps/Actual/Expected template). One issue observation is appended.
 4. **→ PROFILE_UPDATED** (*Update learning profile*): the profile shows 3 skills. GRAM: 7 / 0 / *Priority practice*, marked "was 6 · +1". VOC: 3 / 1 / *Developing*. COM: 2 / 2 / *Monitor*. A recommendation card explains *why* this activity was recommended.
 5. **→ DRILL_ACTIVE** (*Start microlearning*): 5 items with immediate ✓/✗ feedback and explanations, and progress *Question n/5*.
-6. **→ DRILL_COMPLETE**: *Practice complete · Your score X/5*. `practiceCompleted = true`, status *Practice completed · Ready to reassess*, **issueCount stays 7**, with a note explaining why. If the score is under 4/5, *Retry practice* is offered but never blocks the flow.
-7. **→ REASSESSMENT_ACTIVE** (*Try a new QA scenario*): the file-upload scenario, a textarea, and *Use improved sample response*.
-8. **→ REASSESSMENT_COMPLETE** (*Reassess skill — simulated*): *Improvement detected in this sample.* Feedback, an optional refinement, and a before/after table: issueCount 7 → 7 (unchanged), recentSuccesses **0 → 1**, status → **Improving**. One success observation is appended. Then the status message, the final loop (Practice ✓ → Feedback ✓ → Targeted microlearning ✓ → Reassessment ✓ → Continue monitoring), and *Restart demo*.
+6. **→ DRILL_COMPLETE**: Activity completed, *Your score X/5*. **issueCount stays 7.** At 4–5/5: *Practice completed — ready to reassess*. At 0–3/5: *More practice recommended*, with *Retry practice* as the primary action and *Continue the demo to reassessment* labelled as continuing the walkthrough, not meeting the threshold. The 4/5 threshold is marked as illustrative and not empirically validated.
+7. **→ REASSESSMENT_ACTIVE** (*Try a new QA scenario*): the file-upload scenario, a textarea, and *Use Anna’s improved response* (recommended).
+8. **→ REASSESSMENT_COMPLETE** (*Show simulated reassessment*): *Improvement detected in this sample.* It shows the target skill reassessed, the evidence highlighted in Anna’s response, an optional refinement, and the updated profile: issueCount 7 → 7 (unchanged), recentSuccesses **0 → 1**, status → **Improving**. Then *Improvement observed: yes* vs. *Skill mastered: not yet* (1 of 3 illustrative successes), the next step (continue monitoring), and one success observation is appended. Then the final loop (Practice ✓ → Feedback ✓ → Targeted microlearning ✓ → Reassessment ✓ → Continue monitoring), followed by the **Design Rationale & Potential Value** section (learning design, potential learner value, what would need validation) and *Restart demo*.
 9. **Restart → INITIAL**: profile, observations, inputs, quiz state, score, visibility and statuses are all rebuilt from the original data.
 
 The sticky header progress bar (Practice · Feedback · Profile · Microlearning · Reassessment) shows the current and completed steps throughout.
@@ -86,12 +86,14 @@ The core idea is *state*: counters that change, a history that persists through 
 
 - [x] A single page works without a backend (double-click `index.html`).
 - [x] Exactly one practice scenario (checkout) and one reassessment scenario (file upload).
-- [x] The user can type text or insert a sample response.
+- [x] Anna’s sample response is the recommended path. Typed text is optional and is never presented as analysed.
 - [x] Analysis is labelled "simulated", with an explicit pre-scripted note.
 - [x] The first analysis changes the GRAM issueCount from 6 to 7.
 - [x] The Skill Profile shows three skills.
-- [x] The 5-item multiple-choice drill has immediate feedback, progress and a score. Retry is shown under 4/5 and doesn't block.
+- [x] The 5-item drill moves from recognition to application (4 choice + 1 rule-checked gap-fill), with immediate feedback, progress and a score. Below 4/5: *More practice recommended*, Retry recommended, and Continue labelled as continuing the demo.
 - [x] Completing the drill does not reduce issueCount (it stays 7).
+- [x] The profile rules are explained in an expandable note, and counts, thresholds and statuses are marked as simulated.
+- [x] The final screen separates *improvement observed* from *skill mastered*, and a Design Rationale section follows the completed loop.
 - [x] Reassessment changes recentSuccesses from 0 to 1 and the status to *Improving*.
 - [x] Restart fully resets the demo.
 - [x] "Why:" captions explain the learning logic at every step.

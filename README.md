@@ -38,12 +38,12 @@ adaptive-skill-loop/
 |---|---|---|---|
 | 0 | `INITIAL` | page load | Hero only |
 | 1 | `SCENARIO_ACTIVE` | **Try the 2-minute demo** | Checkout scenario, learner card (GRAM count = 6) |
-| 2 | `FEEDBACK_SHOWN` | **Analyse response — simulated** (needs any text or the sample) | 3 feedback cards; `EN-QA-GRAM-001.issueCount` 6 → 7; new issue observation added |
+| 2 | `FEEDBACK_SHOWN` | **Use Anna’s sample response** (recommended) → **Show simulated feedback** | 3 feedback cards; `EN-QA-GRAM-001.issueCount` 6 → 7; new issue observation added |
 | 3 | `PROFILE_UPDATED` | **Update learning profile** | Skill Profile (3 skills), GRAM status → *Priority practice*, recommendation card |
-| 4 | `DRILL_ACTIVE` | **Start microlearning** | 5-item multiple choice, immediate feedback, progress 1/5 … 5/5 |
-| 5 | `DRILL_COMPLETE` | answer item 5 → **See score** | Score X/5; `practiceCompleted = true`; status → *Practice completed · Ready to reassess*; **issueCount stays 7**; *Retry practice* if score < 4 (optional) |
+| 4 | `DRILL_ACTIVE` | **Start microlearning** | 5 items from recognition to application: 4 multiple choice + 1 gap-fill checked against accepted answers; immediate feedback; progress 1/5 … 5/5 |
+| 5 | `DRILL_COMPLETE` | answer item 5 → **See score** | Score X/5; `practiceCompleted = true`; **issueCount stays 7**. 4–5/5 → *Practice completed · Ready to reassess*. 0–3/5 → *More practice recommended*, with **Retry practice** (recommended) or **Continue the demo to reassessment** (labelled as continuing the walkthrough). The 4/5 threshold is illustrative. |
 | 6 | `REASSESSMENT_ACTIVE` | **Try a new QA scenario** | File-upload scenario |
-| 7 | `REASSESSMENT_COMPLETE` | **Reassess skill — simulated** | `recentSuccesses` 0 → 1, status → *Improving*, success observation appended, final loop |
+| 7 | `REASSESSMENT_COMPLETE` | **Use Anna’s improved response** → **Show simulated reassessment** | `recentSuccesses` 0 → 1, status → *Improving*, success observation appended. Final screen: target skill, evidence in Anna’s response, updated profile, improvement vs. mastery, next step, then the Design Rationale section |
 | — | → `INITIAL` | **Restart demo** | Every value, input, quiz answer, section and status is reset |
 
 ## What is simulated
@@ -51,7 +51,8 @@ adaptive-skill-loop/
 - **All "analysis"**: the feedback and reassessment results are pre-scripted in the JSON. The typed text is never analysed. The UI says so next to both buttons.
 - **The AI colleague**: a static prompt.
 - **Profile counts and observations**: demo values. They're not psychometric scores, and "7 observations" is not a level.
-- **What's real**: the five-item drill (it scores your actual answers) and the in-memory state transitions.
+- **Typed text**: optional, for trying the interface only. The feedback and reassessment always refer to Anna’s predefined responses. If you typed something else, the result says so.
+- **What's real**: the five-item drill (it scores your actual answers; the gap-fill item uses a fixed list of accepted answers, not free-text analysis) and the in-memory state transitions.
 
 There's no AI, LLM/API call, speech/ASR, backend, database, authentication, analytics/tracking or external data, and nothing is stored after you close the tab.
 
@@ -61,7 +62,7 @@ All content lives in the `<script type="application/json" id="demo-data">` block
 
 - **Copy**: edit the strings in `scenarios[*]` (title, context, prompt, sample response, feedback) or `practiceActivities[0]` (drill items).
 - **New skill**: add an entry to `skillLibrary` and a matching key in `profile` (`issueCount`, `recentSuccesses`, `status`). Every key in `profile` is rendered as a skill card.
-- **New drill item**: add to `practiceActivities[0].items`. Each item takes `stem` (use `___` for the gap), `options`, `answer` and `feedback`. The progress count and score adapt automatically.
+- **New drill item**: add to `practiceActivities[0].items`. Choice items take `type: "choice"`, `focus`, `instruction`, `stem` (use `___` for an inline gap), `options`, `answer` and `feedback`. Gap-fill items take `type: "gapfill"` and `parts`: text strings plus `{ verb, accept: [...] }` slots. The progress count and score adapt automatically.
 - **New status**: add a label → style mapping in `STATUS_STYLE` in the script.
 - The demo flow deliberately uses exactly one `practice` and one `reassessment` scenario.
 
@@ -85,8 +86,8 @@ node -e "const f=require('fs');let h=f.readFileSync('index.html','utf8');const d
 | File | URL | Viewport |
 |---|---|---|
 | 01-scenario.png | `index.html?jump=scenario` | 1280 × 1000 |
-| 02-feedback-profile.png | `index.html?jump=profile&from=sec-feedback` | 1280 × 1900 |
-| 03-microlearning-reassessment.png | `index.html?jump=reassessed&from=sec-drill` | 1280 × 1750 |
+| 02-feedback-profile.png | `index.html?jump=profile&from=sec-feedback` | 1280 × 2050 |
+| 03-microlearning-reassessment.png | `index.html?jump=reassessed&from=sec-drill` | 1280 × 2900 |
 | optional mobile | `index.html?jump=feedback` | 390 × 844, DevTools device mode |
 
 `jump` accepts `scenario | feedback | profile | drill | score | reassessed`. `from` hides everything above that section, so the capture starts at the top.
