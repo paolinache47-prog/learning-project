@@ -1,0 +1,1280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adaptive Skill Loop — QA Bug Reporting</title>
+<meta name="description" content="Independent learning-design concept inspired by Speexx Talk™. Simulated AI analysis; no Speexx integration.">
+<style>
+:root{
+  --bg:#F7F8FC; --surface:#FFFFFF; --text:#172033; --muted:#667085; --border:#E4E7EC;
+  --accent:#5B5BD6; --accent-soft:#EEEEFC; --accent-ink:#3F3FB0;
+  --success:#16794B; --success-soft:#E7F4EE;
+  --warning:#B54708; --warning-soft:#FEF2E7;
+  --error:#B42318; --error-soft:#FDECEA;
+  --neutral-soft:#F1F3F7;
+  --radius:14px; --radius-sm:9px;
+  --shadow:0 1px 2px rgba(23,32,51,.05),0 4px 16px rgba(23,32,51,.05);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 var(--font);-webkit-font-smoothing:antialiased}
+h1,h2,h3{line-height:1.2;margin:0;letter-spacing:-.01em}
+p{margin:0}
+button,textarea{font:inherit;color:inherit}
+[hidden]{display:none !important}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.mono{font-family:var(--mono);font-size:.8em;letter-spacing:.01em}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* Top bar */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(247,248,252,.92);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--border)}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:650;font-size:15px;white-space:nowrap}
+.brand-mark{width:22px;height:22px;border-radius:50%;border:3px solid var(--accent);border-right-color:transparent;transform:rotate(45deg)}
+.progress{display:flex;gap:4px;list-style:none;margin:0;padding:0}
+.progress li{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);padding:5px 10px;border-radius:999px;white-space:nowrap}
+.progress .dot{width:18px;height:18px;border-radius:50%;border:1.5px solid #C5CAD3;display:grid;place-items:center;font-size:10px;font-weight:700}
+.progress li.is-current{background:var(--accent-soft);color:var(--accent-ink);font-weight:600}
+.progress li.is-current .dot{border-color:var(--accent);background:var(--accent);color:#fff}
+.progress li.is-done{color:var(--text)}
+.progress li.is-done .dot{border-color:var(--success);background:var(--success);color:#fff}
+
+/* Hero */
+.hero{padding:56px 24px 64px}
+.badge-concept{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--accent-ink);background:var(--accent-soft);border:1px solid #D9D9F7;padding:5px 12px;border-radius:999px}
+.badge-concept::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.disclaimer{font-size:12.5px;color:var(--muted);margin-top:8px}
+.hero h1{font-size:clamp(34px,5vw,52px);margin-top:28px;font-weight:720}
+.kicker{font-size:17px;color:var(--muted);margin-top:8px;font-weight:500}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;margin-top:32px;align-items:start}
+.thesis{font-size:21px;font-weight:600;line-height:1.35}
+.question{margin-top:20px;border-left:3px solid var(--accent);padding:4px 0 4px 16px}
+.eyebrow{display:block;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.question p{font-size:17px}
+.lead{color:var(--muted);margin-top:18px;max-width:58ch}
+.loop{list-style:none;margin:0;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);display:grid;gap:6px;counter-reset:loop}
+.loop li{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:var(--radius-sm);font-weight:550;font-size:15px;counter-increment:loop}
+.loop li::before{content:counter(loop);width:26px;height:26px;flex:none;border-radius:50%;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center;font-size:12.5px;font-weight:700}
+.loop li + li{position:relative}
+.loop li + li::after{content:"";position:absolute;left:24px;top:-8px;width:2px;height:10px;background:#D5D8E0}
+.loop li.hl{background:var(--warning-soft)}
+.loop li.hl::before{background:var(--warning);color:#fff}
+.loop-foot{font-size:13px;color:var(--muted);padding:8px 12px 0;display:flex;align-items:center;gap:8px}
+.hero-cta{margin-top:28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hero-cta small{color:var(--muted);font-size:13px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:10px;padding:10px 18px;font-weight:600;font-size:15px;cursor:pointer;transition:background .15s,border-color .15s,transform .05s;text-decoration:none;min-height:44px}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#4B4BC4}
+.btn-secondary{background:var(--surface);border-color:#CDD2DB;color:var(--text)}
+.btn-secondary:hover{border-color:#A9B0BC;background:#FAFBFD}
+.btn-lg{padding:13px 24px;font-size:16px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn .arr{font-size:1.1em;line-height:1}
+
+/* Stages */
+.stage{padding:48px 24px 8px;scroll-margin-top:72px}
+.stage-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin-bottom:20px}
+.step-tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:6px}
+.stage h2{font-size:clamp(23px,3vw,28px);font-weight:680}
+.why{font-size:13.5px;color:var(--muted);max-width:46ch;border-left:2px solid var(--border);padding-left:12px}
+.why b{color:var(--text);font-weight:600}
+.reveal{animation:reveal .45s ease both}
+@keyframes reveal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+.grid-2{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
+.grid-profile{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:start}
+
+/* Learner card */
+.learner-top{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#7C7CE8,#5B5BD6);color:#fff;display:grid;place-items:center;font-weight:700}
+.learner-top strong{display:block;font-size:17px}
+.learner-top span{font-size:13.5px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:14px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:550}
+.snapshot{margin-top:18px;padding-top:16px;border-top:1px dashed var(--border)}
+.snapshot-row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13.5px}
+.snapshot-num{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.snapshot small{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
+
+/* Conversation */
+.context{background:var(--neutral-soft);border-radius:var(--radius-sm);padding:12px 14px;font-size:14.5px}
+.context b{font-weight:600}
+.msg{display:flex;gap:12px;margin:18px 0 20px}
+.msg-avatar{width:34px;height:34px;flex:none;border-radius:10px;background:var(--text);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+.msg-bubble{background:var(--accent-soft);border-radius:4px 14px 14px 14px;padding:12px 15px;max-width:62ch}
+.msg-who{font-size:12px;color:var(--accent-ink);font-weight:600;margin-bottom:3px}
+label.field{display:block;font-weight:600;font-size:14.5px;margin-bottom:6px}
+textarea{width:100%;min-height:128px;resize:vertical;border:1px solid #CDD2DB;border-radius:10px;padding:12px 14px;background:#fff;line-height:1.5;font-size:15px}
+textarea:focus-visible{outline:3px solid var(--accent-soft);border-color:var(--accent);outline-offset:0}
+.field-error{color:var(--error);font-size:13.5px;min-height:1.4em;margin-top:6px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.demo-note{display:flex;gap:8px;align-items:flex-start;margin-top:14px;font-size:13px;color:var(--warning);background:var(--warning-soft);padding:8px 12px;border-radius:8px}
+.demo-note::before{content:"i";flex:none;width:16px;height:16px;margin-top:1px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:10px;font-weight:700;font-style:italic;font-family:Georgia,serif}
+
+/* Feedback */
+.opening{display:flex;gap:12px;align-items:flex-start;background:var(--success-soft);color:#0F5535;border-radius:var(--radius-sm);padding:14px 16px;font-weight:550;margin-bottom:16px}
+.opening .tick{flex:none;width:22px;height:22px;border-radius:50%;background:var(--success);color:#fff;display:grid;place-items:center;font-size:13px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--muted);margin-bottom:14px}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.fb-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+.fb-grid .fb-side{display:grid;gap:16px}
+.fb-card{position:relative}
+.fb-card.recurring{border-color:#F3C9A6;box-shadow:0 0 0 3px var(--warning-soft),var(--shadow)}
+.fb-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;font-size:13px;color:var(--muted)}
+.fb-card h3{font-size:18px;margin-bottom:8px}
+.fb-copy{color:#3A4458;font-size:14.5px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:650;padding:3px 9px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+.chip-rec{background:var(--warning-soft);color:var(--warning);border-color:#F6D3B5}
+.chip-mom{background:var(--neutral-soft);color:#475066;border-color:var(--border)}
+.chip-id{background:#fff;border-color:var(--border);color:#475066;font-family:var(--mono);font-weight:500}
+.ico{font-weight:800}
+.counter{display:flex;align-items:center;gap:14px;margin:14px 0;padding:12px 14px;background:var(--warning-soft);border-radius:10px}
+.counter-label{font-size:13px;color:#7A3A0A;line-height:1.35}
+.counter-nums{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;margin-left:auto}
+.counter-nums .old{font-size:20px;color:#9A6B4A;text-decoration:line-through;text-decoration-thickness:2px}
+.counter-nums .new{font-size:28px;font-weight:750;color:var(--warning)}
+.counter-nums .new.pulse{animation:pulse .9s ease .35s both}
+@keyframes pulse{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.18);opacity:1}100%{transform:scale(1)}}
+.pairs{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:8px}
+.pairs li{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;font-size:14px}
+.pairs del{color:var(--error);background:var(--error-soft);text-decoration-color:rgba(180,35,24,.5);padding:4px 8px;border-radius:6px}
+.pairs ins{color:var(--success);background:var(--success-soft);text-decoration:none;padding:4px 8px;border-radius:6px;font-weight:550}
+.pairs .to{color:var(--muted)}
+.sae{display:grid;gap:6px;margin-top:12px;font-size:13.5px}
+.sae div{display:grid;grid-template-columns:118px 1fr;gap:10px;padding:7px 10px;background:var(--neutral-soft);border-radius:8px}
+.sae b{font-weight:650;color:var(--accent-ink)}
+.next-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;margin-top:22px}
+.next-row p{font-size:13.5px;color:var(--muted)}
+
+/* Profile */
+.profile-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.profile-head h3{font-size:17px}
+.skills{display:grid;gap:12px}
+.skill{border:1px solid var(--border);border-radius:12px;padding:14px 16px;background:#fff;transition:border-color .3s,box-shadow .3s}
+.skill.is-focus{border-color:#F3C9A6;box-shadow:0 0 0 3px var(--warning-soft)}
+.skill.is-improving{border-color:#A9D8C0;box-shadow:0 0 0 3px var(--success-soft)}
+.skill-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.skill-name{font-weight:620;font-size:15px;margin-top:4px}
+.skill-metrics{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:12px;font-size:13px;color:var(--muted)}
+.metric strong{display:inline-block;min-width:1.2em;font-size:20px;color:var(--text);font-variant-numeric:tabular-nums;margin-right:6px;vertical-align:-2px}
+.delta{display:inline-block;margin-left:6px;font-size:11.5px;font-weight:650;padding:1px 7px;border-radius:999px;background:var(--warning-soft);color:var(--warning);vertical-align:2px}
+.delta.up{background:var(--success-soft);color:var(--success)}
+.delta.keep{background:var(--neutral-soft);color:#475066}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:650;padding:4px 10px;border-radius:999px;border:1px solid}
+.status .ico{font-size:11px}
+.st-watch{background:var(--neutral-soft);color:#475066;border-color:var(--border)}
+.st-priority{background:var(--warning-soft);color:var(--warning);border-color:#F6D3B5}
+.st-developing{background:var(--accent-soft);color:var(--accent-ink);border-color:#D9D9F7}
+.st-monitor{background:#fff;color:#475066;border-color:#CDD2DB}
+.st-ready{background:var(--accent-soft);color:var(--accent-ink);border-color:#C9C9F3}
+.st-improving{background:var(--success-soft);color:var(--success);border-color:#B5DEC8}
+.practice-flag{margin-top:10px;font-size:13px;color:var(--accent-ink);display:flex;align-items:center;gap:6px}
+.caption{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+details.obs{margin-top:14px;border-top:1px dashed var(--border);padding-top:12px;font-size:13.5px}
+details.obs summary{cursor:pointer;font-weight:600;color:#3A4458}
+.obs-list{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.obs-list li{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;padding:8px 10px;border-radius:8px;background:var(--neutral-soft);font-size:12.5px}
+.obs-list li.new{background:var(--warning-soft)}
+.obs-list li.success{background:var(--success-soft)}
+.obs-list .mono{color:var(--muted)}
+
+/* Recommendation */
+.rec{border:1.5px solid var(--accent);background:linear-gradient(180deg,#FBFBFF,#fff)}
+.rec h3{font-size:20px;margin-top:2px}
+.meta-row{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.meta-row span{font-size:12.5px;padding:3px 9px;border-radius:6px;background:var(--neutral-soft);color:#3A4458}
+.meta-row span.mono{font-size:12px}
+.rec p.desc{color:#3A4458}
+.rec .reason{margin-top:14px;font-size:13px;color:var(--muted);padding:10px 12px;border-radius:8px;background:var(--neutral-soft)}
+.rec .btn{margin-top:16px;width:100%}
+
+/* Drill */
+.drill{max-width:760px}
+.drill-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;font-size:13.5px;color:var(--muted)}
+.bar{height:6px;border-radius:999px;background:var(--neutral-soft);overflow:hidden;margin-bottom:22px}
+.bar span{display:block;height:100%;background:var(--accent);border-radius:inherit;transition:width .35s ease}
+.stem{font-size:20px;font-weight:600;margin-bottom:16px;line-height:1.4}
+.stem .gap{display:inline-block;min-width:3.4em;border-bottom:2px solid var(--accent);text-align:center;color:var(--accent-ink)}
+.options{display:grid;gap:10px;border:0;padding:0;margin:0}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;width:100%;padding:13px 16px;border:1.5px solid #CDD2DB;border-radius:11px;background:#fff;cursor:pointer;font-size:16px;font-weight:550;min-height:50px}
+.opt:hover:not([disabled]){border-color:var(--accent);background:#FBFBFF}
+.opt[disabled]{cursor:default}
+.opt .tag{font-size:12.5px;font-weight:650}
+.opt.correct{border-color:var(--success);background:var(--success-soft);color:#0F5535}
+.opt.wrong{border-color:var(--error);background:var(--error-soft);color:var(--error)}
+.opt.dim{opacity:.55}
+.drill-fb{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:14.5px}
+.drill-fb:empty{display:none}
+.drill-fb.ok{background:var(--success-soft);color:#0F5535}
+.drill-fb.no{background:var(--error-soft);color:#7E1810}
+.drill-fb strong{font-weight:700}
+.drill-nav{margin-top:16px;display:flex;justify-content:flex-end}
+.score{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.score-ring{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--neutral-soft) 0)}
+.score-ring span{width:76px;height:76px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:22px;font-weight:750;font-variant-numeric:tabular-nums}
+.score h3{font-size:20px}
+.score p{color:var(--muted);font-size:14.5px;margin-top:4px}
+.history-note{margin-top:18px;display:flex;gap:10px;align-items:flex-start;font-size:13.5px;background:var(--neutral-soft);border-radius:10px;padding:12px 14px}
+.history-note b{font-weight:650}
+
+/* Reassessment */
+.result{margin-top:20px}
+.result-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.result-head .tick{width:30px;height:30px;border-radius:50%;background:var(--success);color:#fff;display:grid;place-items:center;font-weight:700}
+.result-head h3{font-size:19px}
+.suggest{margin-top:12px;padding:10px 12px;border-radius:8px;background:var(--neutral-soft);font-size:14px}
+.delta-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14px}
+.delta-table caption{text-align:left;font-weight:650;margin-bottom:8px}
+.delta-table th,.delta-table td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border)}
+.delta-table th{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.delta-table td.num{font-variant-numeric:tabular-nums}
+.status-msg{margin-top:16px;padding:12px 14px;border-radius:10px;background:var(--success-soft);color:#0F5535;font-size:14.5px;font-weight:550}
+.final-loop{list-style:none;padding:0;margin:26px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.final-loop li{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--success-soft);color:#0F5535;font-weight:600;font-size:14px;border:1px solid #B5DEC8}
+.final-loop li.next{background:#fff;color:var(--accent-ink);border:1.5px dashed var(--accent)}
+.final-loop .sep{background:none;border:0;color:var(--muted);padding:0}
+.restart-row{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;margin-top:24px}
+.restart-row p{font-size:13.5px;color:var(--muted)}
+
+footer{margin-top:72px;border-top:1px solid var(--border);padding:24px 0 40px;font-size:13px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
+
+/* Responsive */
+@media (max-width:980px){
+  .progress .lbl{display:none}
+  .progress li{padding:5px 6px}
+  .progress li.is-current .lbl{display:inline}
+}
+@media (max-width:860px){
+  .hero-grid,.grid-2,.grid-profile,.fb-grid{grid-template-columns:1fr}
+  .hero{padding:36px 16px 44px}
+  .stage{padding:40px 16px 4px}
+  .wrap{padding:0 16px}
+}
+@media (max-width:560px){
+  .brand-text{display:none}
+  .progress li.is-current .lbl{display:none}
+  .actions .btn,.hero-cta .btn,.next-row .btn,.restart-row .btn,.drill-nav .btn{width:100%}
+  .pairs li{grid-template-columns:1fr;gap:4px}
+  .pairs .to{display:none}
+  .pairs ins::before{content:"→ ";}
+  .sae div{grid-template-columns:1fr;gap:2px}
+  .card{padding:18px}
+  .score{grid-template-columns:1fr;justify-items:start}
+  .counter{flex-wrap:wrap}
+  .delta-table th:nth-child(1),.delta-table td:nth-child(1){display:none}
+}
+.shot *,.shot *::before,.shot *::after{animation:none !important;transition:none !important}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">Adaptive Skill Loop</span></div>
+    <nav aria-label="Demo progress">
+      <ol class="progress" id="progress"></ol>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="hero wrap" id="hero" aria-labelledby="hero-title">
+  <span class="badge-concept">Independent concept inspired by Speexx Talk™</span>
+  <p class="disclaimer">Prototype for learning-design demonstration. Simulated AI analysis; no Speexx integration.</p>
+
+  <h1 id="hero-title" tabindex="-1">Adaptive Skill Loop</h1>
+  <p class="kicker">QA Bug Reporting · Business English B1–B2</p>
+
+  <div class="hero-grid">
+    <div>
+      <p class="thesis">From isolated feedback to a continuous skill loop.</p>
+      <div class="question">
+        <span class="eyebrow">Design question</span>
+        <p>How might recurring language patterns from job-specific practice become targeted learning priorities — and then be checked again in a new work scenario?</p>
+      </div>
+      <p class="lead">One-off feedback helps a learner correct the moment. This concept explores how repeated patterns could become visible learning priorities, trigger short targeted practice, and be reassessed in context.</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary btn-lg" id="btn-start" type="button">Try the 2-minute demo <span class="arr" aria-hidden="true">→</span></button>
+        <small>5 short steps · no sign-up · nothing leaves your browser</small>
+      </div>
+    </div>
+    <div>
+      <ol class="loop" aria-label="The skill loop">
+        <li>Job-specific practice</li>
+        <li>Feedback</li>
+        <li class="hl">Recurring pattern</li>
+        <li>Microlearning</li>
+        <li>Reassessment</li>
+      </ol>
+      <p class="loop-foot"><span aria-hidden="true">↻</span> Reassessment feeds the next practice cycle.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 1: SCENARIO -->
+<section class="stage wrap" id="sec-scenario" data-min="1" hidden aria-labelledby="scn-title">
+  <div class="stage-head">
+    <div>
+      <span class="step-tag">Step 1 · Job-specific practice</span>
+      <h2 id="scn-title" tabindex="-1"></h2>
+    </div>
+    <p class="why"><b>Why:</b> practice happens inside a real QA task, so feedback refers to language Anna actually needs at work.</p>
+  </div>
+
+  <div class="grid-2">
+    <aside class="card" aria-label="Learner profile">
+      <div class="learner-top">
+        <div class="avatar" aria-hidden="true">A</div>
+        <div><strong id="lr-name"></strong><span>Demo learner</span></div>
+      </div>
+      <dl class="kv" id="lr-kv"></dl>
+      <div class="snapshot">
+        <span class="eyebrow">Tracked skill · before this session</span>
+        <div class="snapshot-row">
+          <span><span class="mono">EN-QA-GRAM-001</span><br>Verb forms — issue observations</span>
+          <span class="snapshot-num" id="snap-count">6</span>
+        </div>
+        <small id="snap-note">From earlier simulated practice sessions.</small>
+      </div>
+    </aside>
+
+    <div class="card">
+      <p class="context" id="scn-context"></p>
+      <div class="msg">
+        <div class="msg-avatar" aria-hidden="true">DEV</div>
+        <div class="msg-bubble">
+          <div class="msg-who">AI colleague · simulated</div>
+          <p id="scn-prompt"></p>
+        </div>
+      </div>
+      <label class="field" for="resp-1">Your response</label>
+      <textarea id="resp-1" aria-describedby="resp-1-err demo-note-1"></textarea>
+      <p class="field-error" id="resp-1-err" aria-live="polite"></p>
+      <div class="actions">
+        <button class="btn btn-secondary" id="btn-sample-1" type="button">Use sample response</button>
+        <button class="btn btn-primary" id="btn-analyse" type="button">Analyse response — simulated</button>
+      </div>
+      <p class="demo-note" id="demo-note-1">Demo logic: feedback below is pre-scripted, not generated from your text.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 2: FEEDBACK -->
+<section class="stage wrap" id="sec-feedback" data-min="2" hidden aria-labelledby="fb-title">
+  <div class="stage-head">
+    <div>
+      <span class="step-tag">Step 2 · Feedback</span>
+      <h2 id="fb-title" tabindex="-1">Conversation feedback</h2>
+    </div>
+    <p class="why"><b>Why:</b> not every correction is a skill gap. Only a pattern seen across sessions becomes a learning priority.</p>
+  </div>
+
+  <p class="opening"><span class="tick" aria-hidden="true">✓</span><span id="fb-opening"></span></p>
+  <div class="legend" aria-hidden="true">
+    <span><span class="chip chip-rec"><span class="ico">↻</span> Recurring pattern</span> seen across sessions → added to profile</span>
+    <span><span class="chip chip-mom">In-the-moment</span> correction for this response only</span>
+  </div>
+  <div class="fb-grid" id="fb-cards"></div>
+
+  <div class="next-row">
+    <button class="btn btn-primary" id="btn-profile" type="button">Update learning profile <span class="arr" aria-hidden="true">→</span></button>
+    <p>Saves the recurring observation to Anna’s skill profile.</p>
+  </div>
+</section>
+
+<!-- STEP 3: PROFILE + RECOMMENDATION -->
+<section class="stage wrap" id="sec-profile" data-min="3" hidden aria-labelledby="pf-title">
+  <div class="stage-head">
+    <div>
+      <span class="step-tag">Step 3 · Skill profile</span>
+      <h2 id="pf-title" tabindex="-1">Learner Skill Profile</h2>
+    </div>
+    <p class="why"><b>Why:</b> the profile keeps recurring observations over time, so the next activity targets a pattern — not a single slip.</p>
+  </div>
+
+  <div class="grid-profile">
+    <div class="card">
+      <div class="profile-head">
+        <h3>Anna · QA English</h3>
+        <span class="chip chip-mom">3 tracked skills</span>
+      </div>
+      <div class="skills" id="skills" aria-live="polite"></div>
+      <p class="caption">Counts represent simulated learning observations across practice sessions. A real system would need validated scoring rules, confidence thresholds, and privacy safeguards.</p>
+      <details class="obs">
+        <summary>Observation log (<span id="obs-count">0</span> records, simulated)</summary>
+        <ul class="obs-list" id="obs-list"></ul>
+      </details>
+    </div>
+
+    <div class="card rec" id="rec-card">
+      <span class="eyebrow">Recommended next step</span>
+      <h3 id="rec-title"></h3>
+      <div class="meta-row" id="rec-meta"></div>
+      <p class="desc" id="rec-desc"></p>
+      <p class="reason">Recommended because <span class="mono">EN-QA-GRAM-001</span> has <b id="rec-count">7</b> issue observations and <b id="rec-succ">0</b> recent successful reassessments.</p>
+      <button class="btn btn-primary" id="btn-drill" type="button">Start microlearning <span class="arr" aria-hidden="true">→</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 4: DRILL -->
+<section class="stage wrap" id="sec-drill" data-min="4" hidden aria-labelledby="dr-title">
+  <div class="stage-head">
+    <div>
+      <span class="step-tag">Step 4 · Targeted microlearning</span>
+      <h2 id="dr-title" tabindex="-1"></h2>
+    </div>
+    <p class="why"><b>Why:</b> five items, each built from Anna’s own error types, in the same QA context.</p>
+  </div>
+
+  <div class="card drill" id="drill-card"></div>
+</section>
+
+<!-- STEP 5: REASSESSMENT -->
+<section class="stage wrap" id="sec-reassess" data-min="6" hidden aria-labelledby="ra-title">
+  <div class="stage-head">
+    <div>
+      <span class="step-tag">Step 5 · Reassessment in a new context</span>
+      <h2 id="ra-title" tabindex="-1"></h2>
+    </div>
+    <p class="why"><b>Why:</b> finishing a drill is not proof of learning. The skill is checked again in a different work situation.</p>
+  </div>
+
+  <div class="card" style="max-width:860px">
+    <p class="context" id="ra-context"></p>
+    <div style="height:18px"></div>
+    <label class="field" for="resp-2">Your response</label>
+    <textarea id="resp-2" aria-describedby="resp-2-err demo-note-2"></textarea>
+    <p class="field-error" id="resp-2-err" aria-live="polite"></p>
+    <div class="actions">
+      <button class="btn btn-secondary" id="btn-sample-2" type="button">Use improved sample response</button>
+      <button class="btn btn-primary" id="btn-reassess" type="button">Reassess skill — simulated</button>
+    </div>
+    <p class="demo-note" id="demo-note-2">Demo logic: the reassessment result is pre-scripted, not generated from your text.</p>
+
+    <div class="result" id="ra-result" data-min="7" hidden aria-live="polite">
+      <div class="result-head"><span class="tick" aria-hidden="true">↑</span><h3 id="ra-headline" tabindex="-1"></h3></div>
+      <p id="ra-feedback"></p>
+      <p class="suggest"><span class="eyebrow" style="margin:0 0 2px">Optional refinement · in-the-moment</span><span id="ra-suggest"></span></p>
+
+      <table class="delta-table">
+        <caption>Profile update · <span class="mono">EN-QA-GRAM-001</span></caption>
+        <thead><tr><th>Skill</th><th>Field</th><th>Before</th><th>After</th></tr></thead>
+        <tbody id="ra-delta"></tbody>
+      </table>
+
+      <p class="status-msg" id="ra-status"></p>
+
+      <ol class="final-loop" aria-label="Loop progress">
+        <li>Practice <span aria-hidden="true">✓</span><span class="sr-only">completed</span></li><li class="sep" aria-hidden="true">→</li>
+        <li>Feedback <span aria-hidden="true">✓</span><span class="sr-only">completed</span></li><li class="sep" aria-hidden="true">→</li>
+        <li>Targeted microlearning <span aria-hidden="true">✓</span><span class="sr-only">completed</span></li><li class="sep" aria-hidden="true">→</li>
+        <li>Reassessment <span aria-hidden="true">✓</span><span class="sr-only">completed</span></li><li class="sep" aria-hidden="true">→</li>
+        <li class="next"><span aria-hidden="true">↻</span> Continue monitoring</li>
+      </ol>
+
+      <div class="restart-row">
+        <button class="btn btn-secondary" id="btn-restart" type="button"><span aria-hidden="true">↺</span> Restart demo</button>
+        <p>Resets every value, input and section to the initial state.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Independent concept inspired by Speexx Talk™ · not affiliated with or endorsed by Speexx.</span>
+    <span>Simulated analysis · no AI, API, backend, tracking or Speexx integration.</span>
+  </div>
+</footer>
+
+<!-- Demo data: mirrors data.json. Edit content here (or re-embed data.json). -->
+<script type="application/json" id="demo-data">
+{
+ "meta": {
+  "concept": "Adaptive Skill Loop — QA Bug Reporting",
+  "label": "Independent concept inspired by Speexx Talk™",
+  "disclaimer": "Prototype for learning-design demonstration. Simulated AI analysis; no Speexx integration.",
+  "version": "0.1.0",
+  "notes": [
+   "All data is static and simulated. Nothing is generated from the learner's text.",
+   "Taxonomy IDs (EN-QA-*, DE-QA-*) belong to this independent prototype only.",
+   "Profile counts are demo aggregates, not psychometric scores."
+  ]
+ },
+ "learner": {
+  "id": "demo-anna",
+  "name": "Anna",
+  "role": "QA Engineer",
+  "language": "English",
+  "level": "B1-B2",
+  "context": "International software team"
+ },
+ "skillLibrary": [
+  {
+   "id": "EN-QA-GRAM-001",
+   "language": "en",
+   "domain": "qa",
+   "category": "grammar",
+   "name": "Verb forms for describing software behaviour",
+   "practiceId": "practice-en-qa-grammar-001"
+  },
+  {
+   "id": "EN-QA-VOC-002",
+   "language": "en",
+   "domain": "qa",
+   "category": "vocabulary",
+   "name": "Precise bug-reporting verbs and system states",
+   "practiceId": null
+  },
+  {
+   "id": "EN-QA-COM-003",
+   "language": "en",
+   "domain": "qa",
+   "category": "communication",
+   "name": "Structuring Steps / Actual / Expected",
+   "practiceId": null
+  },
+  {
+   "id": "DE-QA-GRAM-001",
+   "language": "de",
+   "domain": "qa",
+   "category": "grammar",
+   "name": "Verbformen bei Fehlerbeschreibungen",
+   "equivalentOf": "EN-QA-GRAM-001",
+   "practiceId": null
+  },
+  {
+   "id": "DE-QA-VOC-002",
+   "language": "de",
+   "domain": "qa",
+   "category": "vocabulary",
+   "name": "Präziser Wortschatz für Bugs und Systemzustände",
+   "equivalentOf": "EN-QA-VOC-002",
+   "practiceId": null
+  },
+  {
+   "id": "DE-QA-COM-003",
+   "language": "de",
+   "domain": "qa",
+   "category": "communication",
+   "name": "Schritte / Ist-Ergebnis / Soll-Ergebnis strukturieren",
+   "equivalentOf": "EN-QA-COM-003",
+   "practiceId": null
+  }
+ ],
+ "profile": {
+  "EN-QA-GRAM-001": {
+   "issueCount": 6,
+   "recentSuccesses": 0,
+   "practiceCompleted": false,
+   "lastPractisedAt": null,
+   "status": "Watch"
+  },
+  "EN-QA-VOC-002": {
+   "issueCount": 3,
+   "recentSuccesses": 1,
+   "practiceCompleted": false,
+   "lastPractisedAt": "2026-09-22",
+   "status": "Developing"
+  },
+  "EN-QA-COM-003": {
+   "issueCount": 2,
+   "recentSuccesses": 2,
+   "practiceCompleted": false,
+   "lastPractisedAt": "2026-09-15",
+   "status": "Monitor"
+  }
+ },
+ "observations": [
+  {
+   "id": "obs-demo-001",
+   "learnerId": "demo-anna",
+   "scenarioId": "standup-update",
+   "skillId": "EN-QA-GRAM-001",
+   "type": "issue",
+   "pattern": "past simple missing",
+   "example": "Yesterday I test the login form.",
+   "correction": "Yesterday I tested the login form.",
+   "timestamp": "2026-09-08T09:12:00Z",
+   "confidence": "simulated",
+   "simulated": true
+  },
+  {
+   "id": "obs-demo-002",
+   "learnerId": "demo-anna",
+   "scenarioId": "regression-report",
+   "skillId": "EN-QA-GRAM-001",
+   "type": "issue",
+   "pattern": "do/does agreement",
+   "example": "The button don't respond on mobile.",
+   "correction": "The button doesn't respond on mobile.",
+   "timestamp": "2026-09-11T14:40:00Z",
+   "confidence": "simulated",
+   "simulated": true
+  },
+  {
+   "id": "obs-demo-003",
+   "learnerId": "demo-anna",
+   "scenarioId": "release-check",
+   "skillId": "EN-QA-GRAM-001",
+   "type": "issue",
+   "pattern": "3rd person -s missing",
+   "example": "The filter show wrong results.",
+   "correction": "The filter shows wrong results.",
+   "timestamp": "2026-09-15T10:05:00Z",
+   "confidence": "simulated",
+   "simulated": true
+  },
+  {
+   "id": "obs-demo-004",
+   "learnerId": "demo-anna",
+   "scenarioId": "standup-update",
+   "skillId": "EN-QA-GRAM-001",
+   "type": "issue",
+   "pattern": "past simple missing",
+   "example": "Last sprint I check all API logs.",
+   "correction": "Last sprint I checked all API logs.",
+   "timestamp": "2026-09-22T09:20:00Z",
+   "confidence": "simulated",
+   "simulated": true
+  },
+  {
+   "id": "obs-demo-005",
+   "learnerId": "demo-anna",
+   "scenarioId": "regression-report",
+   "skillId": "EN-QA-GRAM-001",
+   "type": "issue",
+   "pattern": "3rd person -s missing",
+   "example": "The app close when I rotate the screen.",
+   "correction": "The app closes when I rotate the screen.",
+   "timestamp": "2026-09-29T16:02:00Z",
+   "confidence": "simulated",
+   "simulated": true
+  },
+  {
+   "id": "obs-demo-006",
+   "learnerId": "demo-anna",
+   "scenarioId": "release-check",
+   "skillId": "EN-QA-GRAM-001",
+   "type": "issue",
+   "pattern": "do/does agreement",
+   "example": "The export don't include the last row.",
+   "correction": "The export doesn't include the last row.",
+   "timestamp": "2026-10-03T11:30:00Z",
+   "confidence": "simulated",
+   "simulated": true
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "checkout-bug",
+   "type": "practice",
+   "title": "Explain a checkout bug to a developer",
+   "context": "You’re in a team stand-up. You found a reproducible problem on the checkout page. Explain what happens, how you reproduced it, and what you expected instead.",
+   "colleaguePrompt": "Hi Anna, I saw your ticket about checkout. Can you walk me through the issue and tell me what happens after the user clicks Pay?",
+   "placeholder": "Describe the bug in 3–5 sentences…",
+   "sampleResponse": "The checkout page crash when I click Pay. Yesterday I reproduce the issue on Chrome and Safari. The user see an error message, and the payment don't go through. I expected the order to complete, but the page stay on loading.",
+   "simulatedFeedback": {
+    "opening": "Your explanation is understandable and includes the trigger, impact, and expected behaviour.",
+    "items": [
+     {
+      "skillId": "EN-QA-GRAM-001",
+      "kind": "recurring",
+      "category": "Grammar accuracy",
+      "title": "Recurring pattern detected: verb forms",
+      "copy": "This pattern has now appeared 7 times across recent practice scenarios. Prioritise a short review before the next conversation.",
+      "pairs": [
+       [
+        "The checkout page crash",
+        "The checkout page crashes"
+       ],
+       [
+        "Yesterday I reproduce",
+        "Yesterday I reproduced"
+       ],
+       [
+        "The user see",
+        "The user sees"
+       ],
+       [
+        "The payment don't go through",
+        "The payment doesn't go through"
+       ],
+       [
+        "The page stay on loading",
+        "The page stays on the loading screen"
+       ]
+      ],
+      "createsObservation": true
+     },
+     {
+      "skillId": "EN-QA-VOC-002",
+      "kind": "in-the-moment",
+      "category": "Technical vocabulary",
+      "title": "More precise system-state language",
+      "copy": "Your meaning is clear. More precise QA language could make the report easier to act on.",
+      "pairs": [
+       [
+        "the payment doesn't go through",
+        "the payment is not processed"
+       ],
+       [
+        "the page stays on loading",
+        "the loading spinner remains visible / the page remains stuck in a loading state"
+       ]
+      ],
+      "createsObservation": false
+     },
+     {
+      "skillId": "EN-QA-COM-003",
+      "kind": "in-the-moment",
+      "category": "Communicative structure",
+      "title": "Make the report easy to scan",
+      "copy": "Try structuring the explanation as: Steps to reproduce → Actual result → Expected result.",
+      "pairs": [],
+      "createsObservation": false
+     }
+    ]
+   }
+  },
+  {
+   "id": "file-upload-bug",
+   "type": "reassessment",
+   "targetSkillId": "EN-QA-GRAM-001",
+   "title": "Report a file-upload issue",
+   "context": "A user uploads a PDF larger than 10 MB. The progress bar reaches 100%, but the file never appears in the document list. Explain the problem to a developer and say what you expected to happen.",
+   "placeholder": "Describe the issue in 2–4 sentences…",
+   "sampleResponse": "When the user uploads a PDF larger than 10 MB, the progress bar reaches 100%, but the file does not appear in the document list. I reproduced the issue twice in Chrome. I expected the file to appear after the upload completed.",
+   "simulatedResult": {
+    "headline": "Improvement detected in this sample.",
+    "feedback": "Your verb forms are accurate in this response, and the sequence of events is easy to follow.",
+    "secondarySuggestion": "For even more precise QA language, you could say: ‘The upload completes, but the document is not saved to the list.’",
+    "statusMessage": "EN-QA-GRAM-001 is improving. Recheck the skill in two more job-specific scenarios before considering it stable."
+   }
+  }
+ ],
+ "practiceActivities": [
+  {
+   "id": "practice-en-qa-grammar-001",
+   "skillId": "EN-QA-GRAM-001",
+   "title": "Verb Forms for Reporting Software Issues",
+   "meta": [
+    "2–3 min",
+    "Grammar in context",
+    "QA English",
+    "EN-QA-GRAM-001"
+   ],
+   "description": "Practise the verb forms you need to describe reproducible software behaviour clearly.",
+   "passThreshold": 4,
+   "items": [
+    {
+     "stem": "The checkout page ___ every time the user clicks Pay.",
+     "options": [
+      "crashes",
+      "crash",
+      "is crash"
+     ],
+     "answer": "crashes",
+     "feedback": "Correct. ‘The checkout page’ is third-person singular, so the present-simple verb takes -s."
+    },
+    {
+     "stem": "Yesterday, I ___ the issue on two browsers.",
+     "options": [
+      "reproduced",
+      "reproduce",
+      "reproduces"
+     ],
+     "answer": "reproduced",
+     "feedback": "Correct. ‘Yesterday’ signals a completed past event, so use the past simple."
+    },
+    {
+     "stem": "The user ___ an error message after submitting the form.",
+     "options": [
+      "sees",
+      "see",
+      "seeing"
+     ],
+     "answer": "sees",
+     "feedback": "Correct. ‘The user’ is singular, so use ‘sees’."
+    },
+    {
+     "stem": "The payment ___ go through after the timeout.",
+     "options": [
+      "doesn't",
+      "don't",
+      "isn't"
+     ],
+     "answer": "doesn't",
+     "feedback": "Correct. Use ‘doesn’t’ with the singular subject ‘the payment’."
+    },
+    {
+     "stem": "The page ___ on the loading screen until the user refreshes it.",
+     "options": [
+      "stays",
+      "stay",
+      "stayed"
+     ],
+     "answer": "stays",
+     "feedback": "Correct. We are describing reproducible current behaviour, so use the present simple."
+    }
+   ]
+  }
+ ],
+ "statusRules": {
+  "note": "Illustrative demo transitions only. A real system would need validated scoring rules, confidence thresholds and privacy safeguards.",
+  "transitions": [
+   {
+    "event": "recurring issue observed in practice",
+    "to": "Priority practice"
+   },
+   {
+    "event": "targeted practice completed",
+    "to": "Practice completed · Ready to reassess",
+    "issueCountChange": "none — history is kept"
+   },
+   {
+    "event": "successful reassessment in new scenario",
+    "to": "Improving",
+    "recentSuccessesChange": "+1"
+   },
+   {
+    "event": "3 successful reassessments across scenarios",
+    "to": "Stable (not shown in demo)"
+   }
+  ]
+ }
+}
+</script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Data & state ---------- */
+  var DATA = JSON.parse(document.getElementById('demo-data').textContent);
+  var GRAM = 'EN-QA-GRAM-001';
+  var STAGES = ['INITIAL','SCENARIO_ACTIVE','FEEDBACK_SHOWN','PROFILE_UPDATED','DRILL_ACTIVE','DRILL_COMPLETE','REASSESSMENT_ACTIVE','REASSESSMENT_COMPLETE'];
+  var S = {}; STAGES.forEach(function (n, i) { S[n] = i; });
+
+  var practice = DATA.scenarios.filter(function (s) { return s.type === 'practice'; })[0];
+  var reassessScn = DATA.scenarios.filter(function (s) { return s.type === 'reassessment'; })[0];
+  var activity = DATA.practiceActivities[0];
+  var skillsById = {};
+  DATA.skillLibrary.forEach(function (s) { skillsById[s.id] = s; });
+  var trackedIds = Object.keys(DATA.profile);
+
+  var state;
+  function initialState() {
+    return {
+      stage: S.INITIAL,
+      profile: JSON.parse(JSON.stringify(DATA.profile)),
+      observations: JSON.parse(JSON.stringify(DATA.observations)),
+      before: { issueCount: DATA.profile[GRAM].issueCount, recentSuccesses: DATA.profile[GRAM].recentSuccesses, status: DATA.profile[GRAM].status },
+      drill: { index: 0, answers: [] },
+      reassessBefore: null
+    };
+  }
+
+  /* ---------- Helpers ---------- */
+  function $(id) { return document.getElementById(id); }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var instant = false; // used by ?jump= screenshot shortcuts
+
+  function goTo(sectionId, focusId) {
+    var el = $(sectionId);
+    if (!el || instant) return;
+    el.scrollIntoView({ behavior: (reduceMotion || instant) ? 'auto' : 'smooth', block: 'start' });
+    if (focusId && !instant) { var f = $(focusId); if (f) f.focus({ preventScroll: true }); }
+  }
+  function nowISO() { return new Date().toISOString().replace(/\.\d+Z$/, 'Z'); }
+
+  var STATUS_STYLE = {
+    'Watch': ['st-watch', '○'],
+    'Priority practice': ['st-priority', '!'],
+    'Developing': ['st-developing', '◐'],
+    'Monitor': ['st-monitor', '◎'],
+    'Practice completed · Ready to reassess': ['st-ready', '✓'],
+    'Improving': ['st-improving', '↑']
+  };
+  function statusBadge(status) {
+    var s = STATUS_STYLE[status] || ['st-watch', '•'];
+    return '<span class="status ' + s[0] + '"><span class="ico" aria-hidden="true">' + s[1] + '</span>Status: ' + esc(status) + '</span>';
+  }
+
+  /* ---------- Static content (rendered once) ---------- */
+  function renderStatic() {
+    var L = DATA.learner;
+    $('lr-name').textContent = L.name;
+    $('lr-kv').innerHTML = [['Role', L.role], ['Language', L.language], ['Level', L.level.replace('-', '–')], ['Context', L.context]]
+      .map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('');
+
+    $('scn-title').textContent = practice.title;
+    $('scn-context').innerHTML = '<b>Context:</b> ' + esc(practice.context);
+    $('scn-prompt').textContent = practice.colleaguePrompt;
+    $('resp-1').placeholder = practice.placeholder;
+    $('fb-opening').textContent = practice.simulatedFeedback.opening;
+
+    $('rec-title').textContent = activity.title;
+    $('rec-meta').innerHTML = activity.meta.map(function (m) { return '<span' + (/^[A-Z]{2}-/.test(m) ? ' class="mono"' : '') + '>' + esc(m) + '</span>'; }).join('');
+    $('rec-desc').textContent = activity.description;
+    $('dr-title').textContent = activity.title;
+
+    $('ra-title').textContent = reassessScn.title;
+    $('ra-context').innerHTML = '<b>New situation:</b> ' + esc(reassessScn.context);
+    $('resp-2').placeholder = reassessScn.placeholder;
+    var r = reassessScn.simulatedResult;
+    $('ra-headline').textContent = r.headline;
+    $('ra-feedback').textContent = r.feedback;
+    $('ra-suggest').textContent = r.secondarySuggestion;
+    $('ra-status').textContent = r.statusMessage;
+  }
+
+  /* ---------- Dynamic rendering ---------- */
+  var STEPS = [
+    { label: 'Practice', from: S.SCENARIO_ACTIVE, to: S.SCENARIO_ACTIVE },
+    { label: 'Feedback', from: S.FEEDBACK_SHOWN, to: S.FEEDBACK_SHOWN },
+    { label: 'Profile', from: S.PROFILE_UPDATED, to: S.PROFILE_UPDATED },
+    { label: 'Microlearning', from: S.DRILL_ACTIVE, to: S.DRILL_COMPLETE },
+    { label: 'Reassessment', from: S.REASSESSMENT_ACTIVE, to: S.REASSESSMENT_COMPLETE }
+  ];
+  function renderProgress() {
+    $('progress').innerHTML = STEPS.map(function (st, i) {
+      var done = state.stage > st.to || (i === 4 && state.stage === S.REASSESSMENT_COMPLETE);
+      var cur = !done && state.stage >= st.from && state.stage <= st.to;
+      var cls = done ? 'is-done' : (cur ? 'is-current' : '');
+      return '<li class="' + cls + '"' + (cur ? ' aria-current="step"' : '') + '>' +
+        '<span class="dot" aria-hidden="true">' + (done ? '✓' : (i + 1)) + '</span>' +
+        '<span class="lbl">' + st.label + '</span>' +
+        '<span class="sr-only">' + (done ? ' (completed)' : cur ? ' (current)' : '') + '</span></li>';
+    }).join('');
+  }
+
+  function renderVisibility() {
+    document.querySelectorAll('[data-min]').forEach(function (el) {
+      var show = state.stage >= Number(el.getAttribute('data-min'));
+      if (show && el.hidden) { el.hidden = false; el.classList.remove('reveal'); void el.offsetWidth; el.classList.add('reveal'); }
+      if (!show) el.hidden = true;
+    });
+    // lock steps that are already done
+    $('btn-analyse').disabled = state.stage >= S.FEEDBACK_SHOWN;
+    $('btn-sample-1').disabled = state.stage >= S.FEEDBACK_SHOWN;
+    $('resp-1').readOnly = state.stage >= S.FEEDBACK_SHOWN;
+    $('btn-profile').disabled = state.stage >= S.PROFILE_UPDATED;
+    $('btn-drill').disabled = state.stage >= S.DRILL_ACTIVE;
+    $('btn-start').disabled = state.stage >= S.SCENARIO_ACTIVE;
+    $('btn-reassess').disabled = state.stage >= S.REASSESSMENT_COMPLETE;
+    $('btn-sample-2').disabled = state.stage >= S.REASSESSMENT_COMPLETE;
+    $('resp-2').readOnly = state.stage >= S.REASSESSMENT_COMPLETE;
+  }
+
+  function renderSnapshot() {
+    var analysed = state.stage >= S.FEEDBACK_SHOWN;
+    $('snap-count').textContent = analysed ? state.before.issueCount + ' → ' + state.profile[GRAM].issueCount : state.before.issueCount;
+    $('snap-note').textContent = analysed ? 'Updated by this session (+1 recurring observation).' : 'From earlier simulated practice sessions.';
+  }
+
+  function renderFeedback() {
+    var items = practice.simulatedFeedback.items;
+    var cards = items.map(function (it) {
+      var rec = it.kind === 'recurring';
+      var pairs = '';
+      if (it.pairs.length) {
+        pairs = '<ul class="pairs" aria-label="' + (rec ? 'Corrections' : 'Suggestions') + '">' + it.pairs.map(function (p) {
+          return '<li><del><span class="sr-only">Original: </span>' + esc(p[0]) + '</del><span class="to" aria-hidden="true">→</span><ins><span class="sr-only">Better: </span>' + esc(p[1]) + '</ins></li>';
+        }).join('') + '</ul>';
+      }
+      var sae = '';
+      if (it.skillId === 'EN-QA-COM-003') {
+        sae = '<div class="sae" aria-label="Example structure">' +
+          '<div><b>Steps to reproduce</b><span>Open checkout in Chrome or Safari and click Pay.</span></div>' +
+          '<div><b>Actual result</b><span>An error appears; the payment is not processed; the page remains in a loading state.</span></div>' +
+          '<div><b>Expected result</b><span>The order completes.</span></div></div>';
+      }
+      var counter = rec ? '<div class="counter"><span class="counter-label"><b>Issue observations</b><br>across recent practice scenarios</span>' +
+        '<span class="counter-nums" aria-label="Changed from ' + state.before.issueCount + ' to ' + state.profile[GRAM].issueCount + '"><span class="old">' + state.before.issueCount + '</span><span aria-hidden="true">→</span><span class="new pulse">' + state.profile[GRAM].issueCount + '</span></span></div>' : '';
+      return '<article class="card fb-card' + (rec ? ' recurring' : '') + '">' +
+        '<div class="fb-meta"><span>' + esc(it.category) + '</span><span class="chip chip-id">' + it.skillId + '</span>' +
+        (rec ? '<span class="chip chip-rec"><span class="ico" aria-hidden="true">↻</span> Recurring pattern</span>' : '<span class="chip chip-mom">In-the-moment</span>') + '</div>' +
+        '<h3>' + esc(it.title) + '</h3>' + counter +
+        '<p class="fb-copy">' + esc(it.copy) + '</p>' + pairs + sae + '</article>';
+    });
+    $('fb-cards').innerHTML = cards[0] + '<div class="fb-side">' + cards.slice(1).join('') + '</div>';
+  }
+
+  function renderProfile() {
+    $('skills').innerHTML = trackedIds.map(function (id) {
+      var p = state.profile[id], sk = skillsById[id], isGram = id === GRAM;
+      var issueDelta = '', succDelta = '';
+      if (isGram && state.stage >= S.FEEDBACK_SHOWN) issueDelta = '<span class="delta">was ' + state.before.issueCount + ' · +1</span>';
+      if (isGram && state.stage >= S.DRILL_COMPLETE && state.stage < S.REASSESSMENT_COMPLETE) issueDelta = '<span class="delta keep">history kept</span>';
+      if (isGram && state.stage >= S.REASSESSMENT_COMPLETE) succDelta = '<span class="delta up">+1</span>';
+      var cls = '';
+      if (isGram) cls = state.stage >= S.REASSESSMENT_COMPLETE ? ' is-improving' : (state.stage >= S.PROFILE_UPDATED ? ' is-focus' : '');
+      return '<article class="skill' + cls + '">' +
+        '<div class="skill-top"><div><span class="mono" style="color:var(--muted)">' + id + '</span>' +
+        '<div class="skill-name">' + esc(sk.name) + '</div></div>' + statusBadge(p.status) + '</div>' +
+        '<div class="skill-metrics">' +
+        '<span class="metric"><strong>' + p.issueCount + '</strong>Issue observations' + issueDelta + '</span>' +
+        '<span class="metric"><strong>' + p.recentSuccesses + '</strong>Recent successful reassessments' + succDelta + '</span></div>' +
+        (p.practiceCompleted ? '<p class="practice-flag"><span aria-hidden="true">✓</span> Targeted practice completed' + (p.lastPractisedAt ? ' · ' + p.lastPractisedAt : '') + '</p>' : '') +
+        '</article>';
+    }).join('');
+
+    var obs = state.observations.slice().reverse();
+    $('obs-count').textContent = obs.length;
+    $('obs-list').innerHTML = obs.map(function (o) {
+      var isNew = DATA.observations.every(function (d) { return d.id !== o.id; });
+      return '<li class="' + (o.type === 'success' ? 'success' : (isNew ? 'new' : '')) + '">' +
+        '<span class="mono">' + o.id + '</span><span><b>' + (o.type === 'success' ? 'Success' : 'Issue') + '</b> · ' + esc(o.scenarioId) + (isNew ? ' · <b>this session</b>' : '') + '</span>' +
+        '<span class="mono">' + o.skillId + '</span><span>“' + esc(o.example) + '”</span></li>';
+    }).join('');
+
+    $('rec-count').textContent = state.profile[GRAM].issueCount;
+    $('rec-succ').textContent = state.profile[GRAM].recentSuccesses;
+  }
+
+  function renderDrill() {
+    var card = $('drill-card'), d = state.drill, items = activity.items, total = items.length;
+    if (state.stage < S.DRILL_ACTIVE) { card.innerHTML = ''; return; }
+
+    if (state.stage >= S.DRILL_COMPLETE) {
+      var score = d.answers.filter(function (a, i) { return a === items[i].answer; }).length;
+      var pass = score >= activity.passThreshold;
+      card.innerHTML =
+        '<div class="score" aria-live="polite">' +
+          '<div class="score-ring" style="--p:' + (score / total * 100) + '"><span>' + score + '/' + total + '</span></div>' +
+          '<div><span class="eyebrow">Microlearning</span><h3 id="score-title" tabindex="-1">Practice complete</h3>' +
+          '<p>Your score: <b>' + score + '/' + total + '</b>' + (pass ? ' — ready for a new scenario.' : ' — a quick retry could help, but you can still continue.') + '</p></div>' +
+        '</div>' +
+        '<div class="history-note"><span aria-hidden="true">i</span><span><b>Historical observations stay at ' + state.profile[GRAM].issueCount + '.</b> Completing a drill shows practice, not transfer. The status becomes “Practice completed · Ready to reassess”, and the skill is checked again in a new scenario.</span></div>' +
+        '<div class="next-row">' +
+          (!pass && state.stage < S.REASSESSMENT_ACTIVE ? '<button class="btn btn-secondary" id="btn-retry" type="button">↺ Retry practice</button>' : '') +
+          '<button class="btn btn-primary" id="btn-new-scn" type="button"' + (state.stage >= S.REASSESSMENT_ACTIVE ? ' disabled' : '') + '>Try a new QA scenario <span class="arr" aria-hidden="true">→</span></button>' +
+        '</div>';
+      var retry = $('btn-retry'); if (retry) retry.addEventListener('click', retryDrill);
+      $('btn-new-scn').addEventListener('click', startReassessment);
+      return;
+    }
+
+    var it = items[d.index], chosen = d.answers[d.index], answered = chosen !== undefined;
+    var stemHTML = esc(it.stem).replace('___', '<span class="gap">' + (answered ? esc(chosen) : '&nbsp;') + '</span>');
+    var opts = it.options.map(function (o, i) {
+      var cls = '', tag = '';
+      if (answered) {
+        if (o === it.answer) { cls = 'correct'; tag = '✓ ' + (o === chosen ? 'Your answer · correct' : 'Correct answer'); }
+        else if (o === chosen) { cls = 'wrong'; tag = '✗ Your answer'; }
+        else cls = 'dim';
+      }
+      return '<button type="button" class="opt ' + cls + '" data-opt="' + i + '"' + (answered ? ' disabled' : '') + '><span>' + esc(o) + '</span><span class="tag">' + tag + '</span></button>';
+    }).join('');
+    var fb = '';
+    if (answered) {
+      fb = chosen === it.answer
+        ? '<strong>✓ </strong>' + esc(it.feedback)
+        : '<strong>✗ Not quite.</strong> The answer is “' + esc(it.answer) + '”. ' + esc(it.feedback.replace(/^Correct\.\s*/, ''));
+    }
+    card.innerHTML =
+      '<div class="drill-top"><span>Question <b>' + (d.index + 1) + '/' + total + '</b></span><span>Grammar in context · <span class="mono">' + activity.skillId + '</span></span></div>' +
+      '<div class="bar" role="progressbar" aria-label="Drill progress" aria-valuemin="0" aria-valuemax="' + total + '" aria-valuenow="' + (d.index + (answered ? 1 : 0)) + '"><span style="width:' + ((d.index + (answered ? 1 : 0)) / total * 100) + '%"></span></div>' +
+      '<p class="stem" id="stem">' + stemHTML + '</p>' +
+      '<div class="options" role="group" aria-labelledby="stem">' + opts + '</div>' +
+      '<p class="drill-fb ' + (answered ? (chosen === it.answer ? 'ok' : 'no') : '') + '" aria-live="polite">' + fb + '</p>' +
+      (answered ? '<div class="drill-nav"><button type="button" class="btn btn-primary" id="btn-next">' + (d.index + 1 < total ? 'Next question' : 'See score') + ' <span class="arr" aria-hidden="true">→</span></button></div>' : '');
+
+    card.querySelectorAll('.opt').forEach(function (b) {
+      b.addEventListener('click', function () { answer(Number(b.getAttribute('data-opt'))); });
+    });
+    var next = $('btn-next'); if (next) next.addEventListener('click', nextItem);
+  }
+
+  function renderReassessment() {
+    if (state.stage < S.REASSESSMENT_COMPLETE || !state.reassessBefore) { $('ra-delta').innerHTML = ''; return; }
+    var b = state.reassessBefore, p = state.profile[GRAM];
+    var rows = [
+      ['Issue observations', b.issueCount, p.issueCount + ' (unchanged)'],
+      ['Recent successful reassessments', b.recentSuccesses, p.recentSuccesses],
+      ['Status', b.status, p.status]
+    ];
+    $('ra-delta').innerHTML = rows.map(function (r) {
+      return '<tr><td class="mono">' + GRAM + '</td><td>' + r[0] + '</td><td class="num">' + esc(r[1]) + '</td><td class="num"><b>' + esc(r[2]) + '</b></td></tr>';
+    }).join('');
+  }
+
+  function render() {
+    renderProgress();
+    renderVisibility();
+    renderSnapshot();
+    if (state.stage >= S.FEEDBACK_SHOWN) renderFeedback(); else $('fb-cards').innerHTML = '';
+    renderProfile();
+    renderDrill();
+    renderReassessment();
+  }
+
+  /* ---------- Actions (state transitions) ---------- */
+  function start() {
+    if (state.stage < S.SCENARIO_ACTIVE) state.stage = S.SCENARIO_ACTIVE;
+    render(); goTo('sec-scenario', 'scn-title');
+  }
+  function useSample1() { $('resp-1').value = practice.sampleResponse; $('resp-1-err').textContent = ''; }
+
+  function analyse() {
+    if (state.stage >= S.FEEDBACK_SHOWN) return;
+    var text = $('resp-1').value.trim();
+    if (!text) { $('resp-1-err').textContent = 'Write a short response or use the sample response first.'; $('resp-1').focus(); return; }
+    $('resp-1-err').textContent = '';
+    // Pre-scripted result: independent of the typed text.
+    var rec = practice.simulatedFeedback.items.filter(function (i) { return i.createsObservation; })[0];
+    state.profile[rec.skillId].issueCount += 1;                 // 6 → 7
+    state.observations.push({
+      id: 'obs-demo-' + String(state.observations.length + 1).padStart(3, '0'),
+      learnerId: DATA.learner.id, scenarioId: practice.id, skillId: rec.skillId, type: 'issue',
+      pattern: 'verb forms (3rd person -s, past simple, do/does)',
+      example: 'The checkout page crash when I click Pay.', correction: 'The checkout page crashes when I click Pay.',
+      timestamp: nowISO(), confidence: 'simulated', simulated: true
+    });
+    state.stage = S.FEEDBACK_SHOWN;
+    render(); goTo('sec-feedback', 'fb-title');
+  }
+
+  function updateProfile() {
+    if (state.stage !== S.FEEDBACK_SHOWN) return;
+    state.profile[GRAM].status = 'Priority practice';
+    state.stage = S.PROFILE_UPDATED;
+    render(); goTo('sec-profile', 'pf-title');
+  }
+
+  function startDrill() {
+    if (state.stage !== S.PROFILE_UPDATED) return;
+    state.stage = S.DRILL_ACTIVE; state.drill = { index: 0, answers: [] };
+    render(); goTo('sec-drill', 'dr-title');
+  }
+
+  function answer(i) {
+    var d = state.drill, it = activity.items[d.index];
+    if (d.answers[d.index] !== undefined) return;
+    d.answers[d.index] = it.options[i];
+    renderDrill();
+    var next = $('btn-next'); if (next && !instant) next.focus();
+  }
+
+  function nextItem() {
+    var d = state.drill;
+    if (d.index + 1 < activity.items.length) {
+      d.index += 1; renderDrill();
+      var first = document.querySelector('#drill-card .opt'); if (first && !instant) first.focus();
+      return;
+    }
+    // DRILL_COMPLETE: practice recorded, history kept (issueCount NOT reduced).
+    var p = state.profile[GRAM];
+    p.practiceCompleted = true;
+    p.lastPractisedAt = new Date().toISOString().slice(0, 10);
+    p.status = 'Practice completed · Ready to reassess';
+    state.stage = S.DRILL_COMPLETE;
+    render();
+    var t = $('score-title'); if (t && !instant) t.focus();
+  }
+
+  function retryDrill() {
+    state.drill = { index: 0, answers: [] };
+    state.stage = S.DRILL_ACTIVE;
+    render(); goTo('sec-drill', 'dr-title');
+  }
+
+  function startReassessment() {
+    if (state.stage !== S.DRILL_COMPLETE) return;
+    state.stage = S.REASSESSMENT_ACTIVE;
+    render(); goTo('sec-reassess', 'ra-title');
+  }
+  function useSample2() { $('resp-2').value = reassessScn.sampleResponse; $('resp-2-err').textContent = ''; }
+
+  function reassess() {
+    if (state.stage !== S.REASSESSMENT_ACTIVE) return;
+    var text = $('resp-2').value.trim();
+    if (!text) { $('resp-2-err').textContent = 'Write a short response or use the improved sample response first.'; $('resp-2').focus(); return; }
+    $('resp-2-err').textContent = '';
+    var p = state.profile[GRAM];
+    state.reassessBefore = { issueCount: p.issueCount, recentSuccesses: p.recentSuccesses, status: p.status };
+    p.recentSuccesses += 1;                                      // 0 → 1
+    p.status = 'Improving';                                      // issueCount stays 7
+    state.observations.push({
+      id: 'obs-demo-' + String(state.observations.length + 1).padStart(3, '0'),
+      learnerId: DATA.learner.id, scenarioId: reassessScn.id, skillId: GRAM, type: 'success',
+      pattern: 'accurate verb forms in new context',
+      example: 'I reproduced the issue twice in Chrome.', correction: null,
+      timestamp: nowISO(), confidence: 'simulated', simulated: true
+    });
+    state.stage = S.REASSESSMENT_COMPLETE;
+    render(); goTo('ra-result', 'ra-headline');
+  }
+
+  function restart() {
+    state = initialState();
+    $('resp-1').value = ''; $('resp-2').value = '';
+    $('resp-1-err').textContent = ''; $('resp-2-err').textContent = '';
+    document.querySelector('details.obs').open = false;
+    render();
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    $('hero-title').focus({ preventScroll: true });
+  }
+
+  /* ---------- Wire up ---------- */
+  $('btn-start').addEventListener('click', start);
+  $('btn-sample-1').addEventListener('click', useSample1);
+  $('btn-analyse').addEventListener('click', analyse);
+  $('btn-profile').addEventListener('click', updateProfile);
+  $('btn-drill').addEventListener('click', startDrill);
+  $('btn-sample-2').addEventListener('click', useSample2);
+  $('btn-reassess').addEventListener('click', reassess);
+  $('btn-restart').addEventListener('click', restart);
+
+  renderStatic();
+  state = initialState();
+  render();
+
+  /* ---------- Screenshot shortcuts: index.html?jump=scenario|feedback|profile|drill|score|reassessed ---------- */
+  var jump = (location.search.match(/[?&]jump=([a-z]+)/) || [])[1];
+  if (jump) {
+    instant = true;
+    document.documentElement.style.scrollBehavior = 'auto';
+    var order = ['scenario', 'feedback', 'profile', 'drill', 'score', 'reassessed'];
+    var n = order.indexOf(jump);
+    if (n >= 0) { start(); useSample1(); }
+    if (n >= 1) analyse();
+    if (n >= 2) updateProfile();
+    if (n >= 3) { startDrill(); answer(0); }
+    if (n >= 4) { for (var k = 0; k < 5; k++) { if (state.drill.answers[state.drill.index] === undefined) answer(0); nextItem(); } }
+    if (n >= 5) { startReassessment(); useSample2(); reassess(); }
+    var target = { scenario: 'sec-scenario', feedback: 'sec-feedback', profile: 'sec-profile', drill: 'sec-drill', score: 'sec-drill', reassessed: 'sec-reassess' }[jump];
+    // Screenshot mode: no animations; hide everything above the target so it starts at the top.
+    document.documentElement.classList.add('shot');
+    var from = (location.search.match(/[?&]from=([a-z-]+)/) || [])[1] || target;
+    if (from && $(from)) {
+      var el = $(from).previousElementSibling;
+      while (el) { el.style.display = 'none'; el = el.previousElementSibling; }
+    }
+    setTimeout(function () { instant = false; document.documentElement.style.scrollBehavior = ''; }, 50);
+  }
+})();
+</script>
+</body>
+</html>

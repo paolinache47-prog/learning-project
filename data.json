@@ -1,0 +1,205 @@
+{
+  "meta": {
+    "concept": "Adaptive Skill Loop — QA Bug Reporting",
+    "label": "Independent concept inspired by Speexx Talk™",
+    "disclaimer": "Prototype for learning-design demonstration. Simulated AI analysis; no Speexx integration.",
+    "version": "0.1.0",
+    "notes": [
+      "All data is static and simulated. Nothing is generated from the learner's text.",
+      "Taxonomy IDs (EN-QA-*, DE-QA-*) belong to this independent prototype only.",
+      "Profile counts are demo aggregates, not psychometric scores."
+    ]
+  },
+
+  "learner": {
+    "id": "demo-anna",
+    "name": "Anna",
+    "role": "QA Engineer",
+    "language": "English",
+    "level": "B1-B2",
+    "context": "International software team"
+  },
+
+  "skillLibrary": [
+    {
+      "id": "EN-QA-GRAM-001",
+      "language": "en",
+      "domain": "qa",
+      "category": "grammar",
+      "name": "Verb forms for describing software behaviour",
+      "practiceId": "practice-en-qa-grammar-001"
+    },
+    {
+      "id": "EN-QA-VOC-002",
+      "language": "en",
+      "domain": "qa",
+      "category": "vocabulary",
+      "name": "Precise bug-reporting verbs and system states",
+      "practiceId": null
+    },
+    {
+      "id": "EN-QA-COM-003",
+      "language": "en",
+      "domain": "qa",
+      "category": "communication",
+      "name": "Structuring Steps / Actual / Expected",
+      "practiceId": null
+    },
+    {
+      "id": "DE-QA-GRAM-001",
+      "language": "de",
+      "domain": "qa",
+      "category": "grammar",
+      "name": "Verbformen bei Fehlerbeschreibungen",
+      "equivalentOf": "EN-QA-GRAM-001",
+      "practiceId": null
+    },
+    {
+      "id": "DE-QA-VOC-002",
+      "language": "de",
+      "domain": "qa",
+      "category": "vocabulary",
+      "name": "Präziser Wortschatz für Bugs und Systemzustände",
+      "equivalentOf": "EN-QA-VOC-002",
+      "practiceId": null
+    },
+    {
+      "id": "DE-QA-COM-003",
+      "language": "de",
+      "domain": "qa",
+      "category": "communication",
+      "name": "Schritte / Ist-Ergebnis / Soll-Ergebnis strukturieren",
+      "equivalentOf": "EN-QA-COM-003",
+      "practiceId": null
+    }
+  ],
+
+  "profile": {
+    "EN-QA-GRAM-001": {
+      "issueCount": 6,
+      "recentSuccesses": 0,
+      "practiceCompleted": false,
+      "lastPractisedAt": null,
+      "status": "Watch"
+    },
+    "EN-QA-VOC-002": {
+      "issueCount": 3,
+      "recentSuccesses": 1,
+      "practiceCompleted": false,
+      "lastPractisedAt": "2026-09-22",
+      "status": "Developing"
+    },
+    "EN-QA-COM-003": {
+      "issueCount": 2,
+      "recentSuccesses": 2,
+      "practiceCompleted": false,
+      "lastPractisedAt": "2026-09-15",
+      "status": "Monitor"
+    }
+  },
+
+  "observations": [
+    { "id": "obs-demo-001", "learnerId": "demo-anna", "scenarioId": "standup-update",    "skillId": "EN-QA-GRAM-001", "type": "issue", "pattern": "past simple missing",          "example": "Yesterday I test the login form.",          "correction": "Yesterday I tested the login form.",          "timestamp": "2026-09-08T09:12:00Z", "confidence": "simulated", "simulated": true },
+    { "id": "obs-demo-002", "learnerId": "demo-anna", "scenarioId": "regression-report", "skillId": "EN-QA-GRAM-001", "type": "issue", "pattern": "do/does agreement",            "example": "The button don't respond on mobile.",       "correction": "The button doesn't respond on mobile.",       "timestamp": "2026-09-11T14:40:00Z", "confidence": "simulated", "simulated": true },
+    { "id": "obs-demo-003", "learnerId": "demo-anna", "scenarioId": "release-check",     "skillId": "EN-QA-GRAM-001", "type": "issue", "pattern": "3rd person -s missing",       "example": "The filter show wrong results.",            "correction": "The filter shows wrong results.",            "timestamp": "2026-09-15T10:05:00Z", "confidence": "simulated", "simulated": true },
+    { "id": "obs-demo-004", "learnerId": "demo-anna", "scenarioId": "standup-update",    "skillId": "EN-QA-GRAM-001", "type": "issue", "pattern": "past simple missing",          "example": "Last sprint I check all API logs.",         "correction": "Last sprint I checked all API logs.",         "timestamp": "2026-09-22T09:20:00Z", "confidence": "simulated", "simulated": true },
+    { "id": "obs-demo-005", "learnerId": "demo-anna", "scenarioId": "regression-report", "skillId": "EN-QA-GRAM-001", "type": "issue", "pattern": "3rd person -s missing",       "example": "The app close when I rotate the screen.",   "correction": "The app closes when I rotate the screen.",   "timestamp": "2026-09-29T16:02:00Z", "confidence": "simulated", "simulated": true },
+    { "id": "obs-demo-006", "learnerId": "demo-anna", "scenarioId": "release-check",     "skillId": "EN-QA-GRAM-001", "type": "issue", "pattern": "do/does agreement",            "example": "The export don't include the last row.",    "correction": "The export doesn't include the last row.",    "timestamp": "2026-10-03T11:30:00Z", "confidence": "simulated", "simulated": true }
+  ],
+
+  "scenarios": [
+    {
+      "id": "checkout-bug",
+      "type": "practice",
+      "title": "Explain a checkout bug to a developer",
+      "context": "You’re in a team stand-up. You found a reproducible problem on the checkout page. Explain what happens, how you reproduced it, and what you expected instead.",
+      "colleaguePrompt": "Hi Anna, I saw your ticket about checkout. Can you walk me through the issue and tell me what happens after the user clicks Pay?",
+      "placeholder": "Describe the bug in 3–5 sentences…",
+      "sampleResponse": "The checkout page crash when I click Pay. Yesterday I reproduce the issue on Chrome and Safari. The user see an error message, and the payment don't go through. I expected the order to complete, but the page stay on loading.",
+      "simulatedFeedback": {
+        "opening": "Your explanation is understandable and includes the trigger, impact, and expected behaviour.",
+        "items": [
+          {
+            "skillId": "EN-QA-GRAM-001",
+            "kind": "recurring",
+            "category": "Grammar accuracy",
+            "title": "Recurring pattern detected: verb forms",
+            "copy": "This pattern has now appeared 7 times across recent practice scenarios. Prioritise a short review before the next conversation.",
+            "pairs": [
+              ["The checkout page crash", "The checkout page crashes"],
+              ["Yesterday I reproduce", "Yesterday I reproduced"],
+              ["The user see", "The user sees"],
+              ["The payment don't go through", "The payment doesn't go through"],
+              ["The page stay on loading", "The page stays on the loading screen"]
+            ],
+            "createsObservation": true
+          },
+          {
+            "skillId": "EN-QA-VOC-002",
+            "kind": "in-the-moment",
+            "category": "Technical vocabulary",
+            "title": "More precise system-state language",
+            "copy": "Your meaning is clear. More precise QA language could make the report easier to act on.",
+            "pairs": [
+              ["the payment doesn't go through", "the payment is not processed"],
+              ["the page stays on loading", "the loading spinner remains visible / the page remains stuck in a loading state"]
+            ],
+            "createsObservation": false
+          },
+          {
+            "skillId": "EN-QA-COM-003",
+            "kind": "in-the-moment",
+            "category": "Communicative structure",
+            "title": "Make the report easy to scan",
+            "copy": "Try structuring the explanation as: Steps to reproduce → Actual result → Expected result.",
+            "pairs": [],
+            "createsObservation": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "file-upload-bug",
+      "type": "reassessment",
+      "targetSkillId": "EN-QA-GRAM-001",
+      "title": "Report a file-upload issue",
+      "context": "A user uploads a PDF larger than 10 MB. The progress bar reaches 100%, but the file never appears in the document list. Explain the problem to a developer and say what you expected to happen.",
+      "placeholder": "Describe the issue in 2–4 sentences…",
+      "sampleResponse": "When the user uploads a PDF larger than 10 MB, the progress bar reaches 100%, but the file does not appear in the document list. I reproduced the issue twice in Chrome. I expected the file to appear after the upload completed.",
+      "simulatedResult": {
+        "headline": "Improvement detected in this sample.",
+        "feedback": "Your verb forms are accurate in this response, and the sequence of events is easy to follow.",
+        "secondarySuggestion": "For even more precise QA language, you could say: ‘The upload completes, but the document is not saved to the list.’",
+        "statusMessage": "EN-QA-GRAM-001 is improving. Recheck the skill in two more job-specific scenarios before considering it stable."
+      }
+    }
+  ],
+
+  "practiceActivities": [
+    {
+      "id": "practice-en-qa-grammar-001",
+      "skillId": "EN-QA-GRAM-001",
+      "title": "Verb Forms for Reporting Software Issues",
+      "meta": ["2–3 min", "Grammar in context", "QA English", "EN-QA-GRAM-001"],
+      "description": "Practise the verb forms you need to describe reproducible software behaviour clearly.",
+      "passThreshold": 4,
+      "items": [
+        { "stem": "The checkout page ___ every time the user clicks Pay.",           "options": ["crashes", "crash", "is crash"],          "answer": "crashes",    "feedback": "Correct. ‘The checkout page’ is third-person singular, so the present-simple verb takes -s." },
+        { "stem": "Yesterday, I ___ the issue on two browsers.",                    "options": ["reproduced", "reproduce", "reproduces"], "answer": "reproduced", "feedback": "Correct. ‘Yesterday’ signals a completed past event, so use the past simple." },
+        { "stem": "The user ___ an error message after submitting the form.",       "options": ["sees", "see", "seeing"],                 "answer": "sees",       "feedback": "Correct. ‘The user’ is singular, so use ‘sees’." },
+        { "stem": "The payment ___ go through after the timeout.",                  "options": ["doesn't", "don't", "isn't"],             "answer": "doesn't",    "feedback": "Correct. Use ‘doesn’t’ with the singular subject ‘the payment’." },
+        { "stem": "The page ___ on the loading screen until the user refreshes it.", "options": ["stays", "stay", "stayed"],              "answer": "stays",      "feedback": "Correct. We are describing reproducible current behaviour, so use the present simple." }
+      ]
+    }
+  ],
+
+  "statusRules": {
+    "note": "Illustrative demo transitions only. A real system would need validated scoring rules, confidence thresholds and privacy safeguards.",
+    "transitions": [
+      { "event": "recurring issue observed in practice", "to": "Priority practice" },
+      { "event": "targeted practice completed",          "to": "Practice completed · Ready to reassess", "issueCountChange": "none — history is kept" },
+      { "event": "successful reassessment in new scenario", "to": "Improving", "recentSuccessesChange": "+1" },
+      { "event": "3 successful reassessments across scenarios", "to": "Stable (not shown in demo)" }
+    ]
+  }
+}
